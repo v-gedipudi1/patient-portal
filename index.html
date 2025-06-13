@@ -113,13 +113,6 @@
             font-size: 14px;
         }
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
         /* Dashboard */
         .dashboard {
             display: flex;
@@ -170,23 +163,6 @@
             margin-bottom: 20px;
             color: #2c3e50;
             font-size: 24px;
-        }
-
-        /* Session status indicator */
-        .session-indicator {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #27ae60;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            z-index: 1000;
-        }
-
-        .session-indicator.warning {
-            background: #f39c12;
         }
 
         /* Appointments */
@@ -346,11 +322,6 @@
     </style>
 </head>
 <body>
-    <!-- Session status indicator -->
-    <div id="sessionIndicator" class="session-indicator hidden">
-        Session Active
-    </div>
-
     <div class="container">
         <!-- Login Screen -->
         <div id="loginScreen" class="login-screen">
@@ -363,10 +334,6 @@
                 <div class="form-group">
                     <label>Password:</label>
                     <input type="password" id="loginPassword" placeholder="Enter your password">
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="rememberMe">
-                    <label for="rememberMe">Remember me (30 days)</label>
                 </div>
                 <button class="btn" onclick="login()">Login</button>
                 <button class="btn btn-secondary" onclick="showSignup()">Create Account</button>
@@ -420,10 +387,6 @@
                 <div class="form-group">
                     <label>Password:</label>
                     <input type="password" id="adminPassword" placeholder="Enter password">
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="adminRememberMe">
-                    <label for="adminRememberMe">Remember me</label>
                 </div>
                 <button class="btn" onclick="adminLogin()">Login</button>
                 <button class="link-btn" onclick="showLogin()">Back to Patient Login</button>
@@ -579,167 +542,11 @@
         let currentTest = null;
         let currentTestAnswers = [];
         let isAdmin = false;
-        let sessionTimer = null;
-        let sessionExpiryTime = null;
 
-        // Session configuration (in milliseconds)
-        const SESSION_DURATION = 15 * 60 * 1000; // 15 minutes for regular session
-        const REMEMBER_ME_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days for remember me
-        const SESSION_WARNING_TIME = 2 * 60 * 1000; // Show warning 2 minutes before expiry
-
-        // Storage manager for persistent data
-        const StorageManager = {
-            // Save data to memory (simulate database)
-            saveToStorage: function(key, data) {
-                // In a real app, this would save to a database via API
-                // For demo purposes, we'll use a persistent object
-                if (!window.persistentData) {
-                    window.persistentData = {};
-                }
-                window.persistentData[key] = data;
-            },
-
-            // Load data from memory
-            loadFromStorage: function(key) {
-                if (window.persistentData && window.persistentData[key]) {
-                    return window.persistentData[key];
-                }
-                return null;
-            },
-
-            // Session management with tokens
-            setSessionToken: function(user, rememberMe = false) {
-                const sessionData = {
-                    userId: user.id,
-                    isAdmin: isAdmin,
-                    loginTime: Date.now(),
-                    expiryTime: Date.now() + (rememberMe ? REMEMBER_ME_DURATION : SESSION_DURATION),
-                    rememberMe: rememberMe
-                };
-                
-                // Store session data
-                this.saveToStorage('currentSession', sessionData);
-                sessionExpiryTime = sessionData.expiryTime;
-                
-                // Start session monitoring
-                this.startSessionMonitoring();
-                this.updateSessionIndicator();
-            },
-
-            getCurrentSession: function() {
-                return this.loadFromStorage('currentSession');
-            },
-
-            clearSession: function() {
-                this.saveToStorage('currentSession', null);
-                if (sessionTimer) {
-                    clearInterval(sessionTimer);
-                    sessionTimer = null;
-                }
-                this.hideSessionIndicator();
-            },
-
-            isSessionValid: function() {
-                const sessionData = this.getCurrentSession();
-                if (!sessionData) return false;
-                
-                return Date.now() < sessionData.expiryTime;
-            },
-
-            refreshSession: function() {
-                const sessionData = this.getCurrentSession();
-                if (sessionData && !sessionData.rememberMe) {
-                    // Extend session by SESSION_DURATION
-                    sessionData.expiryTime = Date.now() + SESSION_DURATION;
-                    this.saveToStorage('currentSession', sessionData);
-                    sessionExpiryTime = sessionData.expiryTime;
-                }
-            },
-
-            startSessionMonitoring: function() {
-                if (sessionTimer) {
-                    clearInterval(sessionTimer);
-                }
-                
-                sessionTimer = setInterval(() => {
-                    if (!this.isSessionValid()) {
-                        alert('Your session has expired. Please log in again.');
-                        logout();
-                        return;
-                    }
-                    
-                    // Show warning before expiry
-                    const timeLeft = sessionExpiryTime - Date.now();
-                    if (timeLeft <= SESSION_WARNING_TIME && timeLeft > 0) {
-                        this.showSessionWarning();
-                    }
-                    
-                    this.updateSessionIndicator();
-                }, 60000); // Check every minute
-            },
-
-            showSessionWarning: function() {
-                const timeLeft = Math.floor((sessionExpiryTime - Date.now()) / 60000);
-                const indicator = document.getElementById('sessionIndicator');
-                indicator.className = 'session-indicator warning';
-                indicator.textContent = `Session expires in ${timeLeft} min`;
-                
-                if (confirm(`Your session will expire in ${timeLeft} minutes. Would you like to extend it?`)) {
-                    this.refreshSession();
-                }
-            },
-
-            updateSessionIndicator: function() {
-                const indicator = document.getElementById('sessionIndicator');
-                const sessionData = this.getCurrentSession();
-                
-                if (sessionData) {
-                    const timeLeft = Math.floor((sessionExpiryTime - Date.now()) / 60000);
-                    indicator.classList.remove('hidden');
-                    
-                    if (timeLeft > SESSION_WARNING_TIME / 60000) {
-                        indicator.className = 'session-indicator';
-                        indicator.textContent = `Session Active (${timeLeft} min left)`;
-                    }
-                } else {
-                    this.hideSessionIndicator();
-                }
-            },
-
-            hideSessionIndicator: function() {
-                document.getElementById('sessionIndicator').classList.add('hidden');
-            }
-        };
-
-        // Initialize data structures with persistent storage
-        function initializeData() {
-            // Load existing data or create new
-            window.users = StorageManager.loadFromStorage('users') || [];
-            window.appointments = StorageManager.loadFromStorage('appointments') || [];
-            window.testResults = StorageManager.loadFromStorage('testResults') || [];
-
-            // Create demo account if none exists
-            if (window.users.length === 0) {
-                const demoPatient = {
-                    id: 1,
-                    name: 'John Doe',
-                    email: 'demo@patient.com',
-                    password: 'demo123',
-                    phone: '555-0123',
-                    gender: 'male',
-                    createdAt: new Date().toISOString()
-                };
-                window.users.push(demoPatient);
-                StorageManager.saveToStorage('users', window.users);
-            }
-        }
-
-        // Save data whenever it changes
-        function saveData() {
-            StorageManager.saveToStorage('users', window.users);
-            StorageManager.saveToStorage('appointments', window.appointments);
-            StorageManager.saveToStorage('testResults', window.testResults);
-        }
+        // Initialize data structures
+        let users = [];
+        let appointments = [];
+        let testResults = [];
 
         // Admin credentials
         const ADMIN_CREDENTIALS = {
@@ -747,7 +554,7 @@
             password: 'healthcare2024'
         };
 
-        // Mental health test questions (same as before)
+        // Mental health test questions
         const testQuestions = {
             depression: {
                 title: 'Depression Screening (PHQ-9)',
@@ -831,11 +638,508 @@
             }
         };
 
-        // Authentication functions with session management
+        // Authentication functions
         function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
 
             if (!email || !password) {
-                alert('Please
+                alert('Please enter both email and password');
+                return;
+            }
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                isAdmin = false;
+                showPatientDashboard();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function adminLogin() {
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdmin = true;
+                showAdminDashboard();
+            } else {
+                alert('Invalid admin credentials');
+            }
+        }
+
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const phone = document.getElementById('signupPhone').value;
+            const gender = document.getElementById('signupGender').value;
+
+            if (!name || !email || !password || !phone || !gender) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                alert('User with this email already exists');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                phone,
+                gender,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            alert('Account created successfully! Please login.');
+            showLogin();
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            showLogin();
+        }
+
+        // Navigation functions
+        function showLogin() {
+            hideAllScreens();
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showSignup() {
+            hideAllScreens();
+            document.getElementById('signupScreen').classList.remove('hidden');
+        }
+
+        function showAdminLogin() {
+            hideAllScreens();
+            document.getElementById('adminLoginScreen').classList.remove('hidden');
+        }
+
+        function showPatientDashboard() {
+            hideAllScreens();
+            document.getElementById('patientDashboard').classList.remove('hidden');
+            showSection('appointments');
+            loadAppointments();
+            loadProfile();
+        }
+
+        function showAdminDashboard() {
+            hideAllScreens();
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            showAdminSection('appointments');
+            loadAdminAppointments();
+            loadPatientsList();
+            loadAdminTestResults();
+        }
+
+        function hideAllScreens() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('adminLoginScreen').classList.add('hidden');
+            document.getElementById('patientDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+        }
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('testInterface').classList.add('hidden');
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            
+            // Show selected section and mark as active
+            event.target.classList.add('active');
+            
+            switch(section) {
+                case 'appointments':
+                    document.getElementById('appointmentsSection').classList.remove('hidden');
+                    break;
+                case 'mentalHealth':
+                    document.getElementById('mentalHealthSection').classList.remove('hidden');
+                    loadTestResults();
+                    break;
+                case 'healthRecords':
+                    document.getElementById('healthRecordsSection').classList.remove('hidden');
+                    break;
+                case 'profile':
+                    document.getElementById('profileSection').classList.remove('hidden');
+                    break;
+            }
+        }
+
+        function showAdminSection(section) {
+            // Hide all admin sections
+            document.querySelectorAll('#adminDashboard .section').forEach(s => s.classList.add('hidden'));
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('#adminDashboard .sidebar li').forEach(li => li.classList.remove('active'));
+            
+            // Show selected section and mark as active
+            event.target.classList.add('active');
+            
+            switch(section) {
+                case 'appointments':
+                    document.getElementById('adminAppointmentsSection').classList.remove('hidden');
+                    break;
+                case 'patients':
+                    document.getElementById('adminPatientsSection').classList.remove('hidden');
+                    break;
+                case 'testResults':
+                    document.getElementById('adminTestResultsSection').classList.remove('hidden');
+                    break;
+            }
+        }
+
+        // Appointment functions
+        function showBookingForm() {
+            document.getElementById('bookingForm').classList.remove('hidden');
+        }
+
+        function hideBookingForm() {
+            document.getElementById('bookingForm').classList.add('hidden');
+        }
+
+        function bookAppointment() {
+            const time = document.getElementById('appointmentTime').value;
+            const reason = document.getElementById('appointmentReason').value;
+
+            if (!time || !reason) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const appointment = {
+                id: Date.now(),
+                patientId: currentUser.id,
+                patientName: currentUser.name,
+                patientEmail: currentUser.email,
+                patientPhone: currentUser.phone,
+                time,
+                reason,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            appointments.push(appointment);
+            alert('Appointment request submitted successfully!');
+            hideBookingForm();
+            loadAppointments();
+        }
+
+        function loadAppointments() {
+            const appointmentsList = document.getElementById('appointmentsList');
+            const userAppointments = appointments.filter(apt => apt.patientId === currentUser.id);
+            
+            if (userAppointments.length === 0) {
+                appointmentsList.innerHTML = '<p>No appointments found.</p>';
+                return;
+            }
+
+            appointmentsList.innerHTML = userAppointments.map(apt => `
+                <div class="appointment-card">
+                    <h4>Appointment Request</h4>
+                    <p><strong>Time:</strong> ${apt.time.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Reason:</strong> ${apt.reason}</p>
+                    <p><strong>Date Requested:</strong> ${new Date(apt.createdAt).toLocaleDateString()}</p>
+                    <span class="appointment-status status-${apt.status}">${apt.status.toUpperCase()}</span>
+                </div>
+            `).join('');
+        }
+
+        function loadAdminAppointments() {
+            const adminAppointmentsList = document.getElementById('adminAppointmentsList');
+            
+            if (appointments.length === 0) {
+                adminAppointmentsList.innerHTML = '<p>No appointment requests found.</p>';
+                return;
+            }
+
+            adminAppointmentsList.innerHTML = appointments.map(apt => `
+                <div class="admin-card">
+                    <h4>Appointment Request from ${apt.patientName}</h4>
+                    <p><strong>Email:</strong> ${apt.patientEmail}</p>
+                    <p><strong>Phone:</strong> ${apt.patientPhone}</p>
+                    <p><strong>Requested Time:</strong> ${apt.time.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Reason:</strong> ${apt.reason}</p>
+                    <p><strong>Status:</strong> ${apt.status.toUpperCase()}</p>
+                    <p><strong>Date Requested:</strong> ${new Date(apt.createdAt).toLocaleDateString()}</p>
+                    ${apt.status === 'pending' ? `
+                        <div class="action-buttons">
+                            <button class="btn-approve" onclick="approveAppointment(${apt.id})">Approve</button>
+                            <button class="btn-deny" onclick="denyAppointment(${apt.id})">Deny</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function approveAppointment(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                appointment.status = 'approved';
+                loadAdminAppointments();
+                alert('Appointment approved successfully!');
+            }
+        }
+
+        function denyAppointment(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                appointment.status = 'denied';
+                loadAdminAppointments();
+                alert('Appointment denied.');
+            }
+        }
+
+        // Mental Health Test functions
+        function startTest(testType) {
+            currentTest = testType;
+            currentTestAnswers = [];
+            
+            document.getElementById('mentalHealthSection').classList.add('hidden');
+            document.getElementById('testInterface').classList.remove('hidden');
+            
+            const test = testQuestions[testType];
+            document.getElementById('testTitle').textContent = test.title;
+            
+            const questionsHtml = test.questions.map((question, index) => `
+                <div class="question">
+                    <h4>${index + 1}. Over the last 2 weeks, how often have you been bothered by: ${question}?</h4>
+                    <div class="radio-group">
+                        ${test.options.map((option, optIndex) => `
+                            <div class="radio-option">
+                                <input type="radio" name="q${index}" value="${option.value}" id="q${index}_${optIndex}">
+                                <label for="q${index}_${optIndex}">${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('testQuestions').innerHTML = questionsHtml;
+        }
+
+        function submitTest() {
+            const test = testQuestions[currentTest];
+            const answers = [];
+            let totalScore = 0;
+            
+            for (let i = 0; i < test.questions.length; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selectedOption) {
+                    alert(`Please answer question ${i + 1}`);
+                    return;
+                }
+                const answer = {
+                    question: test.questions[i],
+                    answer: test.options.find(opt => opt.value == selectedOption.value).text,
+                    score: parseInt(selectedOption.value)
+                };
+                answers.push(answer);
+                totalScore += answer.score;
+            }
+            
+            // Determine result level
+            const resultLevel = test.scoring.ranges.find(range => 
+                totalScore >= range.min && totalScore <= range.max
+            );
+            
+            const testResult = {
+                id: Date.now(),
+                patientId: currentUser.id,
+                patientName: currentUser.name,
+                testType: currentTest,
+                testTitle: test.title,
+                answers: answers,
+                totalScore: totalScore,
+                resultLevel: resultLevel.level,
+                resultDescription: resultLevel.description,
+                date: new Date().toISOString()
+            };
+            
+            testResults.push(testResult);
+            
+            // Show result
+            const resultHtml = `
+                <div class="test-result">
+                    <h3>Test Results: ${test.title}</h3>
+                    <p><strong>Total Score:</strong> ${totalScore}</p>
+                    <p><strong>Result Level:</strong> ${resultLevel.level}</p>
+                    <p><strong>Description:</strong> ${resultLevel.description}</p>
+                    <p><strong>Date:</strong> ${new Date(testResult.date).toLocaleDateString()}</p>
+                </div>
+            `;
+            
+            document.getElementById('testInterface').innerHTML = resultHtml + 
+                '<button class="btn" onclick="backToMentalHealth()">Back to Tests</button>';
+        }
+
+        function cancelTest() {
+            backToMentalHealth();
+        }
+
+        function backToMentalHealth() {
+            document.getElementById('testInterface').classList.add('hidden');
+            document.getElementById('mentalHealthSection').classList.remove('hidden');
+            loadTestResults();
+        }
+
+        function loadTestResults() {
+            const testResultsDiv = document.getElementById('testResults');
+            const userResults = testResults.filter(result => result.patientId === currentUser.id);
+            
+            if (userResults.length === 0) {
+                testResultsDiv.innerHTML = '<p>No test results found. Take a test to see your results here.</p>';
+                return;
+            }
+            
+            testResultsDiv.innerHTML = '<h3>Your Test History</h3>' + 
+                userResults.map(result => `
+                    <div class="test-result">
+                        <h4>${result.testTitle}</h4>
+                        <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
+                        <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                        <p>${result.resultDescription}</p>
+                    </div>
+                `).join('');
+        }
+
+        // Profile functions
+        function loadProfile() {
+            const profileInfo = document.getElementById('profileInfo');
+            profileInfo.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <h3>Personal Information</h3>
+                    <p><strong>Name:</strong> ${currentUser.name}</p>
+                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                    <p><strong>Phone:</strong> ${currentUser.phone}</p>
+                    <p><strong>Gender:</strong> ${currentUser.gender}</p>
+                    <p><strong>Member Since:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+                </div>
+            `;
+        }
+
+        // Admin patient management
+        function showAddPatientForm() {
+            document.getElementById('addPatientForm').classList.remove('hidden');
+        }
+
+        function hideAddPatientForm() {
+            document.getElementById('addPatientForm').classList.add('hidden');
+        }
+
+        function addPatient() {
+            const name = document.getElementById('newPatientName').value;
+            const email = document.getElementById('newPatientEmail').value;
+            const phone = document.getElementById('newPatientPhone').value;
+            const gender = document.getElementById('newPatientGender').value;
+
+            if (!name || !email || !phone || !gender) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                alert('Patient with this email already exists');
+                return;
+            }
+
+            const newPatient = {
+                id: Date.now(),
+                name,
+                email,
+                password: 'temppass123', // Temporary password
+                phone,
+                gender,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newPatient);
+            alert(`Patient added successfully! Temporary password: temppass123`);
+            hideAddPatientForm();
+            loadPatientsList();
+            
+            // Clear form
+            document.getElementById('newPatientName').value = '';
+            document.getElementById('newPatientEmail').value = '';
+            document.getElementById('newPatientPhone').value = '';
+            document.getElementById('newPatientGender').value = '';
+        }
+
+        function loadPatientsList() {
+            const patientsList = document.getElementById('patientsList');
+            
+            if (users.length === 0) {
+                patientsList.innerHTML = '<p>No patients found.</p>';
+                return;
+            }
+
+            patientsList.innerHTML = '<h3>Registered Patients</h3>' +
+                users.map(user => `
+                    <div class="admin-card">
+                        <h4>${user.name}</h4>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Phone:</strong> ${user.phone}</p>
+                        <p><strong>Gender:</strong> ${user.gender}</p>
+                        <p><strong>Registered:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+        }
+
+        function loadAdminTestResults() {
+            const adminTestResultsList = document.getElementById('adminTestResultsList');
+            
+            if (testResults.length === 0) {
+                adminTestResultsList.innerHTML = '<p>No test results found.</p>';
+                return;
+            }
+
+            adminTestResultsList.innerHTML = testResults.map(result => `
+                <div class="admin-card">
+                    <h4>${result.patientName} - ${result.testTitle}</h4>
+                    <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
+                    <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                    <p><strong>Description:</strong> ${result.resultDescription}</p>
+                    <details>
+                        <summary>View Detailed Answers</summary>
+                        <div style="margin-top: 10px;">
+                            ${result.answers.map((answer, index) => `
+                                <p><strong>Q${index + 1}:</strong> ${answer.question}</p>
+                                <p><strong>Answer:</strong> ${answer.answer} (Score: ${answer.score})</p>
+                                <hr style="margin: 10px 0;">
+                            `).join('')}
+                        </div>
+                    </details>
+                </div>
+            `).join('');
+        }
+
+        // Initialize app
+        window.onload = function() {
+            // Create a demo patient account for testing
+            const demoPatient = {
+                id: 1,
+                name: 'John Doe',
+                email: 'demo@patient.com',
+                password: 'demo123',
+                phone: '555-0123',
+                gender: 'male',
+                createdAt: new Date().toISOString()
+            };
+            users.push(demoPatient);
+            
+            showLogin();
+        };
+    </script>
+</body>
+</html>
