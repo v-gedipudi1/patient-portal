@@ -320,7 +320,6 @@
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <div class="container">
@@ -538,9 +537,6 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://cefuulbxxxpybimpibtt.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlZnV1bGJ4eHhweWJpbXBpYnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTA2MjMsImV4cCI6MjA2NTY2NjYyM30.5-cEflQLAbJpqg0j5dcNzItF814St9q-QS2wqZn2Yj4';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         // Global state
         let currentUser = null;
         let currentTest = null;
@@ -680,24 +676,6 @@
             const password = document.getElementById('signupPassword').value;
             const phone = document.getElementById('signupPhone').value;
             const gender = document.getElementById('signupGender').value;
-
-            // Insert into Supabase
-const { data, error } = await supabase
-  .from('patients')
-  .insert([{
-    name: name,
-    email: email,
-    phone: phone,
-    dob: dob
-  }]);
-
-if (error) {
-  console.error('Supabase insert error:', error.message);
-  alert('Failed to submit. Try again.');
-} else {
-  console.log('Supabase insert success:', data);
-  alert('Form submitted successfully!');
-}
 
             if (!name || !email || !password || !phone || !gender) {
                 alert('Please fill in all fields');
@@ -1096,7 +1074,6 @@ if (error) {
             document.getElementById('newPatientEmail').value = '';
             document.getElementById('newPatientPhone').value = '';
             document.getElementById('newPatientGender').value = '';
-
         }
 
         function loadPatientsList() {
