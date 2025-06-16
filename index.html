@@ -543,10 +543,17 @@
         let currentTestAnswers = [];
         let isAdmin = false;
 
-        // Initialize data structures
-        let users = [];
-        let appointments = [];
-        let testResults = [];
+       // Initialize data structures with localStorage
+let users = JSON.parse(localStorage.getItem('users') || '[]');
+let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+let testResults = JSON.parse(localStorage.getItem('testResults') || '[]');
+
+// Add the saveData function right here
+function saveData() {
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+    localStorage.setItem('testResults', JSON.stringify(testResults));
+}
 
         // Admin credentials
         const ADMIN_CREDENTIALS = {
@@ -698,6 +705,7 @@
             };
 
             users.push(newUser);
+            saveData();
             alert('Account created successfully! Please login.');
             showLogin();
         }
@@ -831,6 +839,7 @@
             };
 
             appointments.push(appointment);
+            saveData();
             alert('Appointment request submitted successfully!');
             hideBookingForm();
             loadAppointments();
@@ -946,6 +955,7 @@
                     score: parseInt(selectedOption.value)
                 };
                 answers.push(answer);
+                saveData();
                 totalScore += answer.score;
             }
             
@@ -968,6 +978,7 @@
             };
             
             testResults.push(testResult);
+            saveData();
             
             // Show result
             const resultHtml = `
@@ -1065,6 +1076,7 @@
             };
 
             users.push(newPatient);
+            saveData();
             alert(`Patient added successfully! Temporary password: temppass123`);
             hideAddPatientForm();
             loadPatientsList();
@@ -1137,7 +1149,7 @@
                 createdAt: new Date().toISOString()
             };
             users.push(demoPatient);
-            
+            saveData();
             showLogin();
         };
     </script>
