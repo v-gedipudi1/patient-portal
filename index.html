@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Portal</title>
@@ -545,33 +544,15 @@
         let isAdmin = false;
 
        // Initialize data structures with localStorage
-    const SUPABASE_URL = 'https://cefuulbxxxpybimpibtt.supabase.co'
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlZnV1bGJ4eHhweWJpbXBpYnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTA2MjMsImV4cCI6MjA2NTY2NjYyM30.5-cEflQLAbJpqg0j5dcNzItF814St9q-QS2wqZn2Yj4'
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+let users = JSON.parse(localStorage.getItem('users') || '[]');
+let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+let testResults = JSON.parse(localStorage.getItem('testResults') || '[]');
 
 // Add the saveData function right here
 function saveData() {
-    // Replace the old saveData() function with these:
-async function saveUser(userData) {
-    const { error } = await supabase
-        .from('users')
-        .insert([userData])
-    if (error) console.error('Error saving user:', error)
-}
-
-async function saveAppointment(appointmentData) {
-    const { error } = await supabase
-        .from('appointments')
-        .insert([appointmentData])
-    if (error) console.error('Error saving appointment:', error)
-}
-
-async function saveTestResult(testData) {
-    const { error } = await supabase
-        .from('test_results')
-        .insert([testData])
-    if (error) console.error('Error saving test result:', error)
-}
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+    localStorage.setItem('testResults', JSON.stringify(testResults));
 }
 
         // Admin credentials
@@ -723,7 +704,8 @@ async function saveTestResult(testData) {
                 createdAt: new Date().toISOString()
             };
 
-            await saveUser(newUser);
+            users.push(newUser);
+            saveData();
             alert('Account created successfully! Please login.');
             showLogin();
         }
@@ -856,7 +838,8 @@ async function saveTestResult(testData) {
                 createdAt: new Date().toISOString()
             };
 
-            await saveAppointment(appointment);
+            appointments.push(appointment);
+            saveData();
             alert('Appointment request submitted successfully!');
             hideBookingForm();
             loadAppointments();
@@ -1152,38 +1135,6 @@ async function saveTestResult(testData) {
                 </div>
             `).join('');
         }
-        async function loadUsers() {
-    const { data, error } = await supabase
-        .from('users')
-        .select('*')
-    if (error) {
-        console.error('Error loading users:', error)
-        return []
-    }
-    return data || []
-}
-
-async function loadAppointments() {
-    const { data, error } = await supabase
-        .from('appointments')
-        .select('*')
-    if (error) {
-        console.error('Error loading appointments:', error)
-        return []
-    }
-    return data || []
-}
-
-async function loadTestResults() {
-    const { data, error } = await supabase
-        .from('test_results')
-        .select('*')
-    if (error) {
-        console.error('Error loading test results:', error)
-        return []
-    }
-    return data || []
-}
 
         // Initialize app
         window.onload = function() {
