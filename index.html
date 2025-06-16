@@ -645,26 +645,23 @@
             }
         };
 
-        // Authentication functions
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                alert('Please enter both email and password');
-                return;
-            }
-
-            const user = users.find(u => u.email === email && u.password === password);
-            if (user) {
-                currentUser = user;
-                isAdmin = false;
-                showPatientDashboard();
-            } else {
-                alert('Invalid credentials');
-            }
-        }
-
+        // Firebase Authentication functions
+async function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) {
+        alert('Please enter both email and password');
+        return;
+    }
+    
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+        alert('Login successful!');
+        showPatientDashboard();
+    } catch (error) {
+        alert('Invalid credentials: ' + error.message);
+    }
+}
         function adminLogin() {
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
@@ -677,18 +674,37 @@
             }
         }
 
-        function signup() {
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const phone = document.getElementById('signupPhone').value;
-            const gender = document.getElementById('signupGender').value;
-
-            if (!name || !email || !password || !phone || !gender) {
-                alert('Please fill in all fields');
-                return;
-            }
-
+      async function signup() {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const phone = document.getElementById('signupPhone').value;
+    const gender = document.getElementById('signupGender').value;
+    
+    if (!name || !email || !password || !phone || !gender) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Save user profile to Firebase
+        await db.collection('patients').doc(user.uid).set({
+            name: name,
+            email: email,
+            phone: phone,
+            gender: gender,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        alert('Account created successfully!');
+        showPatientDashboard();
+    } catch (error) {
+        alert('Signup failed: ' + error.message);
+    }
+}
             if (users.find(u => u.email === email)) {
                 alert('User with this email already exists');
                 return;
@@ -955,6 +971,33 @@
                 answers.push(answer);
                 totalScore += answer.score;
             }
+            // Firebase Assessment Saving Function
+async function saveAssessmentToFirebase(testResult) {
+    const user = auth.currentUser;
+    if (!user) {
+        console.log('User not logged in, assessment not saved to Firebase');
+        return;
+    }
+    
+    try {
+        await db.collection('patients').doc(user.uid)
+            .collection('assessments').add({
+                testType: testResult.testType,
+                testTitle: testResult.testTitle,
+                answers: testResult.answers,
+                totalScore: testResult.totalScore,
+                resultLevel: testResult.resultLevel,
+                resultDescription: testResult.resultDescription,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                dateCompleted: testResult.date
+            });
+        
+        console.log('Assessment saved to Firebase successfully');
+    } catch (error) {
+        console.error('Error saving assessment to Firebase:', error);
+        alert('Assessment completed but not saved to cloud. Please check your internet connection.');
+    }
+}
             
             // Determine result level
             const resultLevel = test.scoring.ranges.find(range => 
@@ -974,10 +1017,13 @@
                 date: new Date().toISOString()
             };
             
-            testResults.push(testResult);
-            
-            // Show result
-            const resultHtml = `
+           testResults.push(testResult);
+
+// Save to Firebase
+saveAssessmentToFirebase(testResult);
+
+// Show result
+const resultHtml = `
                 <div class="test-result">
                     <h3>Test Results: ${test.title}</h3>
                     <p><strong>Total Score:</strong> ${totalScore}</p>
@@ -1001,25 +1047,54 @@
             loadTestResults();
         }
 
-        function loadTestResults() {
-            const testResultsDiv = document.getElementById('testResults');
-            const userResults = testResults.filter(result => result.patientId === currentUser.id);
-            
-            if (userResults.length === 0) {
-                testResultsDiv.innerHTML = '<p>No test results found. Take a test to see your results here.</p>';
-                return;
-            }
-            
-            testResultsDiv.innerHTML = '<h3>Your Test History</h3>' + 
-                userResults.map(result => `
-                    <div class="test-result">
-                        <h4>${result.testTitle}</h4>
-                        <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
-                        <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
-                        <p>${result.resultDescription}</p>
-                    </div>
-                `).join('');
+        async function loadTestResults() {
+    const testResultsDiv = document.getElementById('testResults');
+    const user = auth.currentUser;
+    
+    if (!user) {
+        testResultsDiv.innerHTML = '<p>Please log in to see your test history.</p>';
+        return;
+    }
+    
+    try {
+        // Load from Firebase
+        const snapshot = await db.collection('patients').doc(user.uid)
+            .collection('assessments')
+            .orderBy('timestamp', 'desc')
+            .get();
+        
+        const firebaseResults = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            firebaseResults.push({
+                ...data,
+                date: data.timestamp ? data.timestamp.toDate().toISOString() : data.dateCompleted
+            });
+        });
+        
+        // Combine with local results (for backward compatibility)
+        const localResults = testResults.filter(result => result.patientId === currentUser.id);
+        const allResults = [...firebaseResults, ...localResults];
+        
+        if (allResults.length === 0) {
+            testResultsDiv.innerHTML = '<p>No test results found. Take a test to see your results here.</p>';
+            return;
         }
+        
+        testResultsDiv.innerHTML = '<h3>Your Test History</h3>' + 
+            allResults.map(result => `
+                <div class="test-result">
+                    <h4>${result.testTitle}</h4>
+                    <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
+                    <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                    <p>${result.resultDescription}</p>
+                </div>
+            `).join('');
+    } catch (error) {
+        console.error('Error loading test results:', error);
+        testResultsDiv.innerHTML = '<p>Error loading test history. Please try again.</p>';
+    }
+}
 
         // Profile functions
         function loadProfile() {
@@ -1148,5 +1223,19 @@
             showLogin();
         };
     </script>
+    <script>
+// Firebase functions - ADD BEFORE </body>
+async function registerUser(email, password, firstName, lastName) {
+    // ... same code as above ...
+}
+
+async function loginUser(email, password) {
+    // ... same code as above ...
+}
+
+async function saveAssessment(assessmentType, responses, score) {
+    // ... same code as above ...
+}
+</script>
 </body>
 </html>
