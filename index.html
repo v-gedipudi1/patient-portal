@@ -322,3 +322,885 @@
         }
     </style>
 </head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-form">
+                <h2>Patient Portal Login</h2>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="login()">Login</button>
+                <button class="btn btn-secondary" onclick="showSignup()">Create Account</button>
+                <button class="link-btn" onclick="showAdminLogin()">Staff Login</button>
+            </div>
+        </div>
+
+        <!-- Signup Screen -->
+        <div id="signupScreen" class="login-screen hidden">
+            <div class="login-form">
+                <h2>Create Account</h2>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number:</label>
+                    <input type="tel" id="signupPhone" placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label>Gender:</label>
+                    <select id="signupGender">
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="signup()">Create Account</button>
+                <button class="link-btn" onclick="showLogin()">Back to Login</button>
+            </div>
+        </div>
+
+        <!-- Admin Login Screen -->
+        <div id="adminLoginScreen" class="login-screen hidden">
+            <div class="login-form">
+                <h2>Staff Login</h2>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="adminUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password">
+                </div>
+                <button class="btn" onclick="adminLogin()">Login</button>
+                <button class="link-btn" onclick="showLogin()">Back to Patient Login</button>
+            </div>
+        </div>
+
+        <!-- Patient Dashboard -->
+        <div id="patientDashboard" class="dashboard hidden">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="sidebar">
+                <h3>Patient Portal</h3>
+                <ul>
+                    <li class="active" onclick="showSection('appointments')">Manage Appointments</li>
+                    <li onclick="showSection('mentalHealth')">Mental Health Tests</li>
+                    <li onclick="showSection('healthRecords')">Health Records</li>
+                    <li onclick="showSection('profile')">Profile</li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <!-- Appointments Section -->
+                <div id="appointmentsSection" class="section">
+                    <h2>Manage Appointments</h2>
+                    <div id="appointmentsList"></div>
+                    <button class="btn" onclick="showBookingForm()">Book New Appointment</button>
+                    
+                    <!-- Booking Form -->
+                    <div id="bookingForm" class="hidden" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <h3>Book New Appointment</h3>
+                        <div class="form-group">
+                            <label>Preferred Appointment Time:</label>
+                            <select id="appointmentTime">
+                                <option value="">Select Time</option>
+                                <option value="thursday-1-2pm">Thursday 1-2 PM</option>
+                                <option value="friday-1-2pm">Friday 1-2 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Reason for Visit:</label>
+                            <textarea id="appointmentReason" placeholder="Please describe the reason for your visit"></textarea>
+                        </div>
+                        <button class="btn" onclick="bookAppointment()">Submit Request</button>
+                        <button class="btn btn-secondary" onclick="hideBookingForm()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Mental Health Tests Section -->
+                <div id="mentalHealthSection" class="section hidden">
+                    <h2>Mental Health Tests</h2>
+                    <div class="test-card" onclick="startTest('depression')">
+                        <h3>Depression Screening (PHQ-9)</h3>
+                        <p>Take a self-assessment to screen for depression symptoms</p>
+                    </div>
+                    <div class="test-card" onclick="startTest('anxiety')">
+                        <h3>Anxiety Screening (GAD-7)</h3>
+                        <p>Take a self-assessment to screen for anxiety symptoms</p>
+                    </div>
+                    <div class="test-card" onclick="startTest('adhd')">
+                        <h3>ADHD Screening</h3>
+                        <p>Take a self-assessment to screen for ADHD symptoms</p>
+                    </div>
+                    <div id="testResults"></div>
+                </div>
+
+                <!-- Test Taking Interface -->
+                <div id="testInterface" class="section hidden">
+                    <h2 id="testTitle"></h2>
+                    <div id="testQuestions"></div>
+                    <button class="btn" onclick="submitTest()">Submit Test</button>
+                    <button class="btn btn-secondary" onclick="cancelTest()">Cancel</button>
+                </div>
+
+                <!-- Health Records Section -->
+                <div id="healthRecordsSection" class="section hidden">
+                    <h2>Health Records</h2>
+                    <p>Your health records and medical history will be displayed here.</p>
+                    <div id="healthRecordsList"></div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profileSection" class="section hidden">
+                    <h2>Profile</h2>
+                    <div id="profileInfo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="dashboard hidden">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="sidebar">
+                <h3>Admin Portal</h3>
+                <ul>
+                    <li class="active" onclick="showAdminSection('appointments')">Appointment Requests</li>
+                    <li onclick="showAdminSection('patients')">Patient Management</li>
+                    <li onclick="showAdminSection('testResults')">Test Results</li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <!-- Admin Appointments Section -->
+                <div id="adminAppointmentsSection" class="section">
+                    <h2>Appointment Requests</h2>
+                    <div id="adminAppointmentsList"></div>
+                </div>
+
+                <!-- Admin Patients Section -->
+                <div id="adminPatientsSection" class="section hidden">
+                    <h2>Patient Management</h2>
+                    <button class="btn" onclick="showAddPatientForm()">Add New Patient</button>
+                    <div id="patientsList"></div>
+                    
+                    <!-- Add Patient Form -->
+                    <div id="addPatientForm" class="hidden" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <h3>Add New Patient</h3>
+                        <div class="form-group">
+                            <label>Full Name:</label>
+                            <input type="text" id="newPatientName">
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="newPatientEmail">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="tel" id="newPatientPhone">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select id="newPatientGender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="addPatient()">Add Patient</button>
+                        <button class="btn btn-secondary" onclick="hideAddPatientForm()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Admin Test Results Section -->
+                <div id="adminTestResultsSection" class="section hidden">
+                    <h2>Patient Test Results</h2>
+                    <div id="adminTestResultsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let currentTest = null;
+        let currentTestAnswers = [];
+        let isAdmin = false;
+
+       // Initialize data structures with localStorage
+    const SUPABASE_URL = 'https://cefuulbxxxpybimpibtt.supabase.co'
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlZnV1bGJ4eHhweWJpbXBpYnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTA2MjMsImV4cCI6MjA2NTY2NjYyM30.5-cEflQLAbJpqg0j5dcNzItF814St9q-QS2wqZn2Yj4'
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+// Add the saveData function right here
+function saveData() {
+    // Replace the old saveData() function with these:
+async function saveUser(userData) {
+    const { error } = await supabase
+        .from('users')
+        .insert([userData])
+    if (error) console.error('Error saving user:', error)
+}
+
+async function saveAppointment(appointmentData) {
+    const { error } = await supabase
+        .from('appointments')
+        .insert([appointmentData])
+    if (error) console.error('Error saving appointment:', error)
+}
+
+async function saveTestResult(testData) {
+    const { error } = await supabase
+        .from('test_results')
+        .insert([testData])
+    if (error) console.error('Error saving test result:', error)
+}
+}
+
+        // Admin credentials
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'healthcare2024'
+        };
+
+        // Mental health test questions
+        const testQuestions = {
+            depression: {
+                title: 'Depression Screening (PHQ-9)',
+                questions: [
+                    'Little interest or pleasure in doing things',
+                    'Feeling down, depressed, or hopeless',
+                    'Trouble falling or staying asleep, or sleeping too much',
+                    'Feeling tired or having little energy',
+                    'Poor appetite or overeating',
+                    'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+                    'Trouble concentrating on things, such as reading the newspaper or watching television',
+                    'Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual',
+                    'Thoughts that you would be better off dead, or of hurting yourself in some way'
+                ],
+                options: [
+                    { text: 'Not at all', value: 0 },
+                    { text: 'Several days', value: 1 },
+                    { text: 'More than half the days', value: 2 },
+                    { text: 'Nearly every day', value: 3 }
+                ],
+                scoring: {
+                    ranges: [
+                        { min: 0, max: 4, level: 'Minimal', description: 'Minimal depression symptoms' },
+                        { min: 5, max: 9, level: 'Mild', description: 'Mild depression symptoms' },
+                        { min: 10, max: 14, level: 'Moderate', description: 'Moderate depression symptoms' },
+                        { min: 15, max: 19, level: 'Moderately Severe', description: 'Moderately severe depression symptoms' },
+                        { min: 20, max: 27, level: 'Severe', description: 'Severe depression symptoms' }
+                    ]
+                }
+            },
+            anxiety: {
+                title: 'Anxiety Screening (GAD-7)',
+                questions: [
+                    'Feeling nervous, anxious, or on edge',
+                    'Not being able to stop or control worrying',
+                    'Worrying too much about different things',
+                    'Trouble relaxing',
+                    'Being so restless that it is hard to sit still',
+                    'Becoming easily annoyed or irritable',
+                    'Feeling afraid, as if something awful might happen'
+                ],
+                options: [
+                    { text: 'Not at all', value: 0 },
+                    { text: 'Several days', value: 1 },
+                    { text: 'More than half the days', value: 2 },
+                    { text: 'Nearly every day', value: 3 }
+                ],
+                scoring: {
+                    ranges: [
+                        { min: 0, max: 4, level: 'Minimal', description: 'Minimal anxiety symptoms' },
+                        { min: 5, max: 9, level: 'Mild', description: 'Mild anxiety symptoms' },
+                        { min: 10, max: 14, level: 'Moderate', description: 'Moderate anxiety symptoms' },
+                        { min: 15, max: 21, level: 'Severe', description: 'Severe anxiety symptoms' }
+                    ]
+                }
+            },
+            adhd: {
+                title: 'ADHD Screening',
+                questions: [
+                    'How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done?',
+                    'How often do you have difficulty getting things in order when you have to do a task that requires organization?',
+                    'How often do you have problems remembering appointments or obligations?',
+                    'When you have a task that requires a lot of thought, how often do you avoid or delay getting started?',
+                    'How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?',
+                    'How often do you feel overly active and compelled to do things, like you were driven by a motor?'
+                ],
+                options: [
+                    { text: 'Never', value: 0 },
+                    { text: 'Rarely', value: 1 },
+                    { text: 'Sometimes', value: 2 },
+                    { text: 'Often', value: 3 },
+                    { text: 'Very Often', value: 4 }
+                ],
+                scoring: {
+                    ranges: [
+                        { min: 0, max: 8, level: 'Low', description: 'Low likelihood of ADHD symptoms' },
+                        { min: 9, max: 13, level: 'Moderate', description: 'Moderate likelihood of ADHD symptoms' },
+                        { min: 14, max: 24, level: 'High', description: 'High likelihood of ADHD symptoms' }
+                    ]
+                }
+            }
+        };
+
+        // Authentication functions
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Please enter both email and password');
+                return;
+            }
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                isAdmin = false;
+                showPatientDashboard();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function adminLogin() {
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdmin = true;
+                showAdminDashboard();
+            } else {
+                alert('Invalid admin credentials');
+            }
+        }
+
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const phone = document.getElementById('signupPhone').value;
+            const gender = document.getElementById('signupGender').value;
+
+            if (!name || !email || !password || !phone || !gender) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                alert('User with this email already exists');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                phone,
+                gender,
+                createdAt: new Date().toISOString()
+            };
+
+            await saveUser(newUser);
+            alert('Account created successfully! Please login.');
+            showLogin();
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            showLogin();
+        }
+
+        // Navigation functions
+        function showLogin() {
+            hideAllScreens();
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showSignup() {
+            hideAllScreens();
+            document.getElementById('signupScreen').classList.remove('hidden');
+        }
+
+        function showAdminLogin() {
+            hideAllScreens();
+            document.getElementById('adminLoginScreen').classList.remove('hidden');
+        }
+
+        function showPatientDashboard() {
+            hideAllScreens();
+            document.getElementById('patientDashboard').classList.remove('hidden');
+            showSection('appointments');
+            loadAppointments();
+            loadProfile();
+        }
+
+        function showAdminDashboard() {
+            hideAllScreens();
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            showAdminSection('appointments');
+            loadAdminAppointments();
+            loadPatientsList();
+            loadAdminTestResults();
+        }
+
+        function hideAllScreens() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('adminLoginScreen').classList.add('hidden');
+            document.getElementById('patientDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+        }
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('testInterface').classList.add('hidden');
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            
+            // Show selected section and mark as active
+            event.target.classList.add('active');
+            
+            switch(section) {
+                case 'appointments':
+                    document.getElementById('appointmentsSection').classList.remove('hidden');
+                    break;
+                case 'mentalHealth':
+                    document.getElementById('mentalHealthSection').classList.remove('hidden');
+                    loadTestResults();
+                    break;
+                case 'healthRecords':
+                    document.getElementById('healthRecordsSection').classList.remove('hidden');
+                    break;
+                case 'profile':
+                    document.getElementById('profileSection').classList.remove('hidden');
+                    break;
+            }
+        }
+
+        function showAdminSection(section) {
+            // Hide all admin sections
+            document.querySelectorAll('#adminDashboard .section').forEach(s => s.classList.add('hidden'));
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('#adminDashboard .sidebar li').forEach(li => li.classList.remove('active'));
+            
+            // Show selected section and mark as active
+            event.target.classList.add('active');
+            
+            switch(section) {
+                case 'appointments':
+                    document.getElementById('adminAppointmentsSection').classList.remove('hidden');
+                    break;
+                case 'patients':
+                    document.getElementById('adminPatientsSection').classList.remove('hidden');
+                    break;
+                case 'testResults':
+                    document.getElementById('adminTestResultsSection').classList.remove('hidden');
+                    break;
+            }
+        }
+
+        // Appointment functions
+        function showBookingForm() {
+            document.getElementById('bookingForm').classList.remove('hidden');
+        }
+
+        function hideBookingForm() {
+            document.getElementById('bookingForm').classList.add('hidden');
+        }
+
+        function bookAppointment() {
+            const time = document.getElementById('appointmentTime').value;
+            const reason = document.getElementById('appointmentReason').value;
+
+            if (!time || !reason) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const appointment = {
+                id: Date.now(),
+                patientId: currentUser.id,
+                patientName: currentUser.name,
+                patientEmail: currentUser.email,
+                patientPhone: currentUser.phone,
+                time,
+                reason,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            await saveAppointment(appointment);
+            alert('Appointment request submitted successfully!');
+            hideBookingForm();
+            loadAppointments();
+        }
+
+        function loadAppointments() {
+            const appointmentsList = document.getElementById('appointmentsList');
+            const userAppointments = appointments.filter(apt => apt.patientId === currentUser.id);
+            
+            if (userAppointments.length === 0) {
+                appointmentsList.innerHTML = '<p>No appointments found.</p>';
+                return;
+            }
+
+            appointmentsList.innerHTML = userAppointments.map(apt => `
+                <div class="appointment-card">
+                    <h4>Appointment Request</h4>
+                    <p><strong>Time:</strong> ${apt.time.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Reason:</strong> ${apt.reason}</p>
+                    <p><strong>Date Requested:</strong> ${new Date(apt.createdAt).toLocaleDateString()}</p>
+                    <span class="appointment-status status-${apt.status}">${apt.status.toUpperCase()}</span>
+                </div>
+            `).join('');
+        }
+
+        function loadAdminAppointments() {
+            const adminAppointmentsList = document.getElementById('adminAppointmentsList');
+            
+            if (appointments.length === 0) {
+                adminAppointmentsList.innerHTML = '<p>No appointment requests found.</p>';
+                return;
+            }
+
+            adminAppointmentsList.innerHTML = appointments.map(apt => `
+                <div class="admin-card">
+                    <h4>Appointment Request from ${apt.patientName}</h4>
+                    <p><strong>Email:</strong> ${apt.patientEmail}</p>
+                    <p><strong>Phone:</strong> ${apt.patientPhone}</p>
+                    <p><strong>Requested Time:</strong> ${apt.time.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Reason:</strong> ${apt.reason}</p>
+                    <p><strong>Status:</strong> ${apt.status.toUpperCase()}</p>
+                    <p><strong>Date Requested:</strong> ${new Date(apt.createdAt).toLocaleDateString()}</p>
+                    ${apt.status === 'pending' ? `
+                        <div class="action-buttons">
+                            <button class="btn-approve" onclick="approveAppointment(${apt.id})">Approve</button>
+                            <button class="btn-deny" onclick="denyAppointment(${apt.id})">Deny</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function approveAppointment(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                appointment.status = 'approved';
+                loadAdminAppointments();
+                alert('Appointment approved successfully!');
+            }
+        }
+
+        function denyAppointment(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                appointment.status = 'denied';
+                loadAdminAppointments();
+                alert('Appointment denied.');
+            }
+        }
+
+        // Mental Health Test functions
+        function startTest(testType) {
+            currentTest = testType;
+            currentTestAnswers = [];
+            
+            document.getElementById('mentalHealthSection').classList.add('hidden');
+            document.getElementById('testInterface').classList.remove('hidden');
+            
+            const test = testQuestions[testType];
+            document.getElementById('testTitle').textContent = test.title;
+            
+            const questionsHtml = test.questions.map((question, index) => `
+                <div class="question">
+                    <h4>${index + 1}. Over the last 2 weeks, how often have you been bothered by: ${question}?</h4>
+                    <div class="radio-group">
+                        ${test.options.map((option, optIndex) => `
+                            <div class="radio-option">
+                                <input type="radio" name="q${index}" value="${option.value}" id="q${index}_${optIndex}">
+                                <label for="q${index}_${optIndex}">${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('testQuestions').innerHTML = questionsHtml;
+        }
+
+        function submitTest() {
+            const test = testQuestions[currentTest];
+            const answers = [];
+            let totalScore = 0;
+            
+            for (let i = 0; i < test.questions.length; i++) {
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selectedOption) {
+                    alert(`Please answer question ${i + 1}`);
+                    return;
+                }
+                const answer = {
+                    question: test.questions[i],
+                    answer: test.options.find(opt => opt.value == selectedOption.value).text,
+                    score: parseInt(selectedOption.value)
+                };
+                answers.push(answer);
+                saveData();
+                totalScore += answer.score;
+            }
+            
+            // Determine result level
+            const resultLevel = test.scoring.ranges.find(range => 
+                totalScore >= range.min && totalScore <= range.max
+            );
+            
+            const testResult = {
+                id: Date.now(),
+                patientId: currentUser.id,
+                patientName: currentUser.name,
+                testType: currentTest,
+                testTitle: test.title,
+                answers: answers,
+                totalScore: totalScore,
+                resultLevel: resultLevel.level,
+                resultDescription: resultLevel.description,
+                date: new Date().toISOString()
+            };
+            
+            testResults.push(testResult);
+            saveData();
+            
+            // Show result
+            const resultHtml = `
+                <div class="test-result">
+                    <h3>Test Results: ${test.title}</h3>
+                    <p><strong>Total Score:</strong> ${totalScore}</p>
+                    <p><strong>Result Level:</strong> ${resultLevel.level}</p>
+                    <p><strong>Description:</strong> ${resultLevel.description}</p>
+                    <p><strong>Date:</strong> ${new Date(testResult.date).toLocaleDateString()}</p>
+                </div>
+            `;
+            
+            document.getElementById('testInterface').innerHTML = resultHtml + 
+                '<button class="btn" onclick="backToMentalHealth()">Back to Tests</button>';
+        }
+
+        function cancelTest() {
+            backToMentalHealth();
+        }
+
+        function backToMentalHealth() {
+            document.getElementById('testInterface').classList.add('hidden');
+            document.getElementById('mentalHealthSection').classList.remove('hidden');
+            loadTestResults();
+        }
+
+        function loadTestResults() {
+            const testResultsDiv = document.getElementById('testResults');
+            const userResults = testResults.filter(result => result.patientId === currentUser.id);
+            
+            if (userResults.length === 0) {
+                testResultsDiv.innerHTML = '<p>No test results found. Take a test to see your results here.</p>';
+                return;
+            }
+            
+            testResultsDiv.innerHTML = '<h3>Your Test History</h3>' + 
+                userResults.map(result => `
+                    <div class="test-result">
+                        <h4>${result.testTitle}</h4>
+                        <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
+                        <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                        <p>${result.resultDescription}</p>
+                    </div>
+                `).join('');
+        }
+
+        // Profile functions
+        function loadProfile() {
+            const profileInfo = document.getElementById('profileInfo');
+            profileInfo.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <h3>Personal Information</h3>
+                    <p><strong>Name:</strong> ${currentUser.name}</p>
+                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                    <p><strong>Phone:</strong> ${currentUser.phone}</p>
+                    <p><strong>Gender:</strong> ${currentUser.gender}</p>
+                    <p><strong>Member Since:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+                </div>
+            `;
+        }
+
+        // Admin patient management
+        function showAddPatientForm() {
+            document.getElementById('addPatientForm').classList.remove('hidden');
+        }
+
+        function hideAddPatientForm() {
+            document.getElementById('addPatientForm').classList.add('hidden');
+        }
+
+        function addPatient() {
+            const name = document.getElementById('newPatientName').value;
+            const email = document.getElementById('newPatientEmail').value;
+            const phone = document.getElementById('newPatientPhone').value;
+            const gender = document.getElementById('newPatientGender').value;
+
+            if (!name || !email || !phone || !gender) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                alert('Patient with this email already exists');
+                return;
+            }
+
+            const newPatient = {
+                id: Date.now(),
+                name,
+                email,
+                password: 'temppass123', // Temporary password
+                phone,
+                gender,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newPatient);
+            saveData();
+            alert(`Patient added successfully! Temporary password: temppass123`);
+            hideAddPatientForm();
+            loadPatientsList();
+            
+            // Clear form
+            document.getElementById('newPatientName').value = '';
+            document.getElementById('newPatientEmail').value = '';
+            document.getElementById('newPatientPhone').value = '';
+            document.getElementById('newPatientGender').value = '';
+        }
+
+        function loadPatientsList() {
+            const patientsList = document.getElementById('patientsList');
+            
+            if (users.length === 0) {
+                patientsList.innerHTML = '<p>No patients found.</p>';
+                return;
+            }
+
+            patientsList.innerHTML = '<h3>Registered Patients</h3>' +
+                users.map(user => `
+                    <div class="admin-card">
+                        <h4>${user.name}</h4>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Phone:</strong> ${user.phone}</p>
+                        <p><strong>Gender:</strong> ${user.gender}</p>
+                        <p><strong>Registered:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+        }
+
+        function loadAdminTestResults() {
+            const adminTestResultsList = document.getElementById('adminTestResultsList');
+            
+            if (testResults.length === 0) {
+                adminTestResultsList.innerHTML = '<p>No test results found.</p>';
+                return;
+            }
+
+            adminTestResultsList.innerHTML = testResults.map(result => `
+                <div class="admin-card">
+                    <h4>${result.patientName} - ${result.testTitle}</h4>
+                    <p><strong>Score:</strong> ${result.totalScore} - ${result.resultLevel}</p>
+                    <p><strong>Date:</strong> ${new Date(result.date).toLocaleDateString()}</p>
+                    <p><strong>Description:</strong> ${result.resultDescription}</p>
+                    <details>
+                        <summary>View Detailed Answers</summary>
+                        <div style="margin-top: 10px;">
+                            ${result.answers.map((answer, index) => `
+                                <p><strong>Q${index + 1}:</strong> ${answer.question}</p>
+                                <p><strong>Answer:</strong> ${answer.answer} (Score: ${answer.score})</p>
+                                <hr style="margin: 10px 0;">
+                            `).join('')}
+                        </div>
+                    </details>
+                </div>
+            `).join('');
+        }
+        async function loadUsers() {
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+    if (error) {
+        console.error('Error loading users:', error)
+        return []
+    }
+    return data || []
+}
+
+async function loadAppointments() {
+    const { data, error } = await supabase
+        .from('appointments')
+        .select('*')
+    if (error) {
+        console.error('Error loading appointments:', error)
+        return []
+    }
+    return data || []
+}
+
+async function loadTestResults() {
+    const { data, error } = await supabase
+        .from('test_results')
+        .select('*')
+    if (error) {
+        console.error('Error loading test results:', error)
+        return []
+    }
+    return data || []
+}
+
+        // Initialize app
+        window.onload = function() {
+            // Create a demo patient account for testing
+            const demoPatient = {
+                id: 1,
+                name: 'John Doe',
+                email: 'demo@patient.com',
+                password: 'demo123',
+                phone: '555-0123',
+                gender: 'male',
+                createdAt: new Date().toISOString()
+            };
+            users.push(demoPatient);
+            saveData();
+            showLogin();
+        };
+    </script>
+</body>
+</html>
