@@ -543,17 +543,10 @@
         let currentTestAnswers = [];
         let isAdmin = false;
 
-       // Initialize data structures with localStorage
-let users = JSON.parse(localStorage.getItem('users') || '[]');
-let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-let testResults = JSON.parse(localStorage.getItem('testResults') || '[]');
-
-// Add the saveData function right here
-function saveData() {
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    localStorage.setItem('testResults', JSON.stringify(testResults));
-}
+        // Initialize data structures
+        let users = [];
+        let appointments = [];
+        let testResults = [];
 
         // Admin credentials
         const ADMIN_CREDENTIALS = {
@@ -705,7 +698,6 @@ function saveData() {
             };
 
             users.push(newUser);
-            saveData();
             alert('Account created successfully! Please login.');
             showLogin();
         }
@@ -839,7 +831,6 @@ function saveData() {
             };
 
             appointments.push(appointment);
-            saveData();
             alert('Appointment request submitted successfully!');
             hideBookingForm();
             loadAppointments();
@@ -955,7 +946,6 @@ function saveData() {
                     score: parseInt(selectedOption.value)
                 };
                 answers.push(answer);
-                saveData();
                 totalScore += answer.score;
             }
             
@@ -978,7 +968,6 @@ function saveData() {
             };
             
             testResults.push(testResult);
-            saveData();
             
             // Show result
             const resultHtml = `
@@ -1076,7 +1065,6 @@ function saveData() {
             };
 
             users.push(newPatient);
-            saveData();
             alert(`Patient added successfully! Temporary password: temppass123`);
             hideAddPatientForm();
             loadPatientsList();
@@ -1149,7 +1137,7 @@ function saveData() {
                 createdAt: new Date().toISOString()
             };
             users.push(demoPatient);
-            saveData();
+            
             showLogin();
         };
     </script>
