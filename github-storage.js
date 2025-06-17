@@ -1,8 +1,8 @@
 // GitHub API configuration
 const GITHUB_CONFIG = {
-  token: 'YOUR_GITHUB_TOKEN_HERE', // Replace with your actual token
-  owner: 'YOUR_USERNAME', // Replace with your GitHub username
-  repo: 'YOUR_REPO_NAME', // Replace with your repository name
+  token: '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', // Replace with your actual token
+  owner: 'v-gedipudi1', // Replace with your GitHub username
+  repo: 'patient-portal', // Replace with your repository name
   branch: 'main'
 };
 
