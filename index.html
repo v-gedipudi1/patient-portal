@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,523 +10,243 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-
         .container {
-            width: 100%;
-            max-width: 1200px;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Login Screen */
-        .login-screen {
-            padding: 60px;
-            text-align: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .login-form h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 28px;
-        }
-
-        .form-group {
+        h2 {
             margin-bottom: 20px;
-            text-align: left;
         }
-
+        .form-group {
+            margin-bottom: 15px;
+        }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
+            margin-bottom: 5px;
         }
-
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
         .btn {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            margin-bottom: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            color: #333;
-        }
-
-        .link-btn {
-            background: none;
-            color: #667eea;
-            text-decoration: underline;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px 0;
-        }
-
-        .sidebar h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar li {
-            padding: 15px 30px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar li:hover, .sidebar li.active {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            background: #f8f9fa;
-        }
-
-        .section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .section h2 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 24px;
-        }
-
-        /* Appointments */
-        .appointment-card {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .appointment-status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .status-pending {
-            background: #f39c12;
-        }
-
-        .status-approved {
-            background: #27ae60;
-        }
-
-        .status-denied {
-            background: #e74c3c;
-        }
-
-        /* Mental Health Tests */
-        .test-card {
-            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .test-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .question {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .question h4 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
             padding: 10px;
-            background: white;
+            background: #28a745;
+            color: white;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
-
-        .radio-option:hover {
-            background: #e9ecef;
+        .btn:hover {
+            background: #218838;
         }
-
-        .test-result {
-            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
+        .link-btn {
+            text-align: center;
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .appointment-requests {
             margin-top: 20px;
         }
-
-        /* Admin specific styles */
-        .admin-card {
-            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .action-buttons {
-            margin-top: 15px;
-        }
-
-        .btn-approve {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 8px 15px;
+        .request-card {
+            background: #e9ecef;
+            padding: 10px;
+            margin-bottom: 10px;
             border-radius: 5px;
-            cursor: pointer;
+        }
+        .request-card button {
             margin-right: 10px;
-        }
-
-        .btn-deny {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                padding: 20px 0;
-            }
-            
-            .sidebar ul {
-                display: flex;
-                overflow-x: auto;
-            }
-            
-            .sidebar li {
-                white-space: nowrap;
-                min-width: 150px;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login Screen -->
-        <div id="loginScreen" class="login-screen">
-            <div class="login-form">
-                <h2>Patient Portal Login</h2>
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="loginEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password">
-                </div>
-                <button class="btn" onclick="login()">Login</button>
-                <button class="btn btn-secondary" onclick="showSignup()">Create Account</button>
-                <button class="link-btn" onclick="showAdminLogin()">Staff Login</button>
-            </div>
+
+<div class="container" id="patientPortal">
+    <div id="loginScreen">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" required>
         </div>
-
-        <!-- Signup Screen -->
-        <div id="signupScreen" class="login-screen hidden">
-            <div class="login-form">
-                <h2>Create Account</h2>
-                <div class="form-group">
-                    <label>Full Name:</label>
-                    <input type="text" id="signupName" placeholder="Enter your full name">
-                </div>
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="signupEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="signupPassword" placeholder="Create a password">
-                </div>
-                <div class="form-group">
-                    <label>Phone Number:</label>
-                    <input type="tel" id="signupPhone" placeholder="Enter your phone number">
-                </div>
-                <div class="form-group">
-                    <label>Gender:</label>
-                    <select id="signupGender">
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                        <option value="prefer-not-to-say">Prefer not to say</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="signup()">Create Account</button>
-                <button class="link-btn" onclick="showLogin()">Back to Login</button>
-            </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
         </div>
+        <button class="btn" onclick="login()">Login</button>
+        <span class="link-btn" onclick="showSignup()">Create Account</span>
+    </div>
 
-        <!-- Admin Login Screen -->
-        <div id="adminLoginScreen" class="login-screen hidden">
-            <div class="login-form">
-                <h2>Staff Login</h2>
-                <div class="form-group">
-                    <label>Username:</label>
-                    <input type="text" id="adminUsername" placeholder="Enter username">
-                </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="adminPassword" placeholder="Enter password">
-                </div>
-                <button class="btn" onclick="adminLogin()">Login</button>
-                <button class="link-btn" onclick="showLogin()">Back to Patient Login</button>
-            </div>
+    <div id="signupScreen" class="hidden">
+        <h2>Create Account</h2>
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" id="signupName" placeholder="Enter your full name" required>
         </div>
-
-        <!-- Patient Dashboard -->
-        <div id="patientDashboard" class="dashboard hidden">
-            <button class="logout-btn" onclick="logout()">Logout</button>
-            <div class="sidebar">
-                <h3>Patient Portal</h3>
-                <ul>
-                    <li class="active" onclick="showSection('appointments')">Manage Appointments</li>
-                    <li onclick="showSection('mentalHealth')">Mental Health Tests</li>
-                    <li onclick="showSection('healthRecords')">Health Records</li>
-                    <li onclick="showSection('profile')">Profile</li>
-                </ul>
-            </div>
-            <div class="main-content">
-                <!-- Appointments Section -->
-                <div id="appointmentsSection" class="section">
-                    <h2>Manage Appointments</h2>
-                    <div id="appointmentsList"></div>
-                    <button class="btn" onclick="showBookingForm()">Book New Appointment</button>
-                    
-                    <!-- Booking Form -->
-                    <div id="bookingForm" class="hidden" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                        <h3>Book New Appointment</h3>
-                        <div class="form-group">
-                            <label>Preferred Appointment Time:</label>
-                            <select id="appointmentTime">
-                                <option value="">Select Time</option>
-                                <option value="thursday-1-2pm">Thursday 1-2 PM</option>
-                                <option value="friday-1-2pm">Friday 1-2 PM</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Reason for Visit:</label>
-                            <textarea id="appointmentReason" placeholder="Please describe the reason for your visit"></textarea>
-                        </div>
-                        <button class="btn" onclick="bookAppointment()">Submit Request</button>
-                        <button class="btn btn-secondary" onclick="hideBookingForm()">Cancel</button>
-                    </div>
-                </div>
-
-                <!-- Mental Health Tests Section -->
-                <div id="mentalHealthSection" class="section hidden">
-                    <h2>Mental Health Tests</h2>
-                    <div class="test-card" onclick="startTest('depression')">
-                        <h3>Depression Screening (PHQ-9)</h3>
-                        <p>Take a self-assessment to screen for depression symptoms</p>
-                    </div>
-                    <div class="test-card" onclick="startTest('anxiety')">
-                        <h3>Anxiety Screening (GAD-7)</h3>
-                        <p>Take a self-assessment to screen for anxiety symptoms</p>
-                    </div>
-                    <div class="test-card" onclick="startTest('adhd')">
-                        <h3>ADHD Screening</h3>
-                        <p>Take a self-assessment to screen for ADHD symptoms</p>
-                    </div>
-                    <div id="testResults"></div>
-                </div>
-
-                <!-- Test Taking Interface -->
-                <div id="testInterface" class="section hidden">
-                    <h2 id="testTitle"></h2>
-                    <div id="testQuestions"></div>
-                    <button class="btn" onclick="submitTest()">Submit Test</button>
-                    <button class="btn btn-secondary" onclick="cancelTest()">Cancel</button>
-                </div>
-
-                <!-- Health Records Section -->
-                <div id="healthRecordsSection" class="section hidden">
-                    <h2>Health Records</h2>
-                    <p>Your health records and medical history will be displayed here.</p>
-                    <div id="healthRecordsList"></div>
-                </div>
-
-                <!-- Profile Section -->
-                <div id="profileSection" class="section hidden">
-                    <h2>Profile</h2>
-                    <div id="profileInfo"></div>
-                </div>
-            </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" required>
         </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="signupPassword" placeholder="Create a password" required>
+        </div>
+        <button class="btn" onclick="signup()">Create Account</button>
+        <span class="link-btn" onclick="showLogin()">Back to Login</span>
+    </div>
 
-        <!-- Admin Dashboard -->
-        <div id="adminDashboard" class="dashboard hidden">
-            <button class="logout-btn" onclick="logout()">Logout</button>
-            <div class="sidebar">
-                <h3>Admin Portal</h3>
-                <ul>
-                    <li class="active" onclick="showAdminSection('appointments')">Appointment Requests</li>
-                    <li onclick="showAdminSection('patients')">Patient Management</li>
-                    <li onclick="showAdminSection('testResults')">Test Results</li>
-                </ul>
-            </div>
-            <div class="main-content">
-                <!-- Admin Appointments Section -->
-                <div id="adminAppointmentsSection" class="section">
-                    <h2>Appointment Requests</h2>
-                    <div id="adminAppointmentsList"></div>
+    <div id="dashboard" class="hidden">
+        <h2>Dashboard</h2>
+        <div class="form-group">
+            <label>Preferred Appointment Time:</label>
+            <input type="text" id="appointmentTime" placeholder="Enter preferred time" required>
+        </div>
+        <div class="form-group">
+            <label>Reason for Visit:</label>
+            <input type="text" id="appointmentReason" placeholder="Enter reason" required>
+        </div>
+        <button class="btn" onclick="sendAppointmentRequest()">Send Appointment Request</button>
+        <div class="appointment-requests" id="appointmentRequests"></div>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<div class="container hidden" id="adminPortal">
+    <h2>Admin Portal</h2>
+    <div id="adminRequests"></div>
+    <button class="btn" onclick="logoutAdmin()">Logout</button>
+</div>
+
+<script>
+    const users = [];
+    const appointments = [];
+    let currentUser = null;
+
+    function showSignup() {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('signupScreen').classList.remove('hidden');
+    }
+
+    function showLogin() {
+        document.getElementById('signupScreen').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+            currentUser = user;
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            loadAppointments();
+        } else {
+            alert('Invalid email or password');
+        }
+    }
+
+    function signup() {
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+
+        if (users.some(u => u.email === email)) {
+            alert('Email already exists');
+            return;
+        }
+
+        users.push({ name, email, password });
+        alert('Account created successfully!');
+        showLogin();
+    }
+
+    function sendAppointmentRequest() {
+        const time = document.getElementById('appointmentTime').value;
+        const reason = document.getElementById('appointmentReason').value;
+
+        if (!time || !reason) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        const appointment = {
+            patient: currentUser.name,
+            time,
+            reason,
+            status: 'pending'
+        };
+
+        appointments.push(appointment);
+        alert('Appointment request sent!');
+        loadAppointments();
+    }
+
+    function loadAppointments() {
+        const appointmentRequests = document.getElementById('appointmentRequests');
+        appointmentRequests.innerHTML = appointments
+            .filter(a => a.patient === currentUser.name)
+            .map(a => `<div>${a.time} - ${a.reason} (${a.status})</div>`)
+            .join('');
+    }
+
+    function logout() {
+        currentUser = null;
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function showAdminPortal() {
+        document.getElementById('patientPortal').classList.add('hidden');
+        document.getElementById('adminPortal').classList.remove('hidden');
+        loadAdminRequests();
+    }
+
+    function loadAdminRequests() {
+        const adminRequests = document.getElementById('adminRequests');
+        adminRequests.innerHTML = appointments
+            .map((a, index) => `
+                <div class="request-card">
+                    <div>${a.patient} requests an appointment on ${a.time} for ${a.reason}</div>
+                    <button class="btn" onclick="acceptRequest(${index})">Accept</button>
+                    <button class="btn" onclick="denyRequest(${index})">Deny</button>
                 </div>
+            `).join('');
+    }
 
-                <!-- Admin Patients Section -->
-                <div id="adminPatientsSection" class="section hidden">
-                    <h2>Patient Management</h2>
-                    <button class="btn" onclick="showAddPatientForm()">Add New Patient</button>
-                    <div id="patientsList"></div>
-                    
-                    <!-- Add Patient Form -->
-                    <div id="addPatientForm" class="hidden" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                        <h3>Add New Patient</h3>
-                        <div class="form-group">
-                            <label>Full Name:</label>
-                            <input type="text" id="newPatientName">
-                        </div>
-                        <div class="form-group">
-                            <label>Email:</label>
-                            <input type="email" id="newPatientEmail">
-                        </div>
-                        <div class="form-group">
-                            <label>Phone:</label>
-                            <input type="tel" id="newPatientPhone">
-                        </div>
-                        <div class="form-group">
-                            <label>Gender:</label>
-                            <select id="newPatientGender">
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                                <option value="prefer-not-to-say">Prefer not to say</option>
-                            </select>
-                        </div>
-                        <button class="btn" onclick="addPatient()">Add Patient</button>
-                        <button class="btn btn-secondary" onclick="hideAddPatientForm()">Cancel</button>
-                    </div>
-                </div>
+    function acceptRequest(index) {
+        appointments[index].status = 'accepted';
+        loadAdminRequests();
+    }
 
-                <!-- Admin Test Results Section -->
-                <div id="adminTestResultsSection" class="section hidden">
-                    <h2>Patient Test Results
+    function denyRequest(index) {
+        appointments[index].status = 'denied';
+        loadAdminRequests();
+    }
+
+    function logoutAdmin() {
+        document.getElementById('adminPortal').classList.add('hidden');
+        document.getElementById('patientPortal').classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
