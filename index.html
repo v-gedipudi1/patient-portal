@@ -1,4 +1,4 @@
-C<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -621,48 +621,32 @@ C<!DOCTYPE html>
 
         // API Functions
         async function callGoogleScript(action, data = {}) {
-    try {
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ action, ...data })
-        });
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action, ...data })
+                });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
 
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error('Error calling Google Script:', error);
-        showMessage('An error occurred. Please try again.', 'error');
-        return { success: false, error: error.message };
-    } finally {
-        // Ensure the loading state is reset regardless of success or error
-        setLoading('loginBtn', false);
-        setLoading('signupBtn', false);
-        setLoading('adminLoginBtn', false);
-        setLoading('bookBtn', false);
-        setLoading('submitTestBtn', false);
-    }
-}
-
-async function loadPatientData() {
-    try {
-        await Promise.all([
-            loadPatientAppointments(),
-            loadPatientTestResults(),
-            loadPatientProfile()
-        ]);
-    } catch (error) {
-        console.error('Error loading patient data:', error);
-        showMessage('Failed to load patient data. Please refresh.', 'error');
-    }
-}
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error calling Google Script:', error);
+                showMessage('An error occurred. Please try again.', 'error');
                 return { success: false, error: error.message };
+            } finally {
+                // Ensure the loading state is reset regardless of success or error
+                setLoading('loginBtn', false);
+                setLoading('signupBtn', false);
+                setLoading('adminLoginBtn', false);
+                setLoading('bookBtn', false);
+                setLoading('submitTestBtn', false);
             }
         }
 
@@ -670,16 +654,16 @@ async function loadPatientData() {
         async function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
+
             if (!email || !password) {
                 showMessage('Please fill in all fields', 'error', 'loginMessage');
                 return;
             }
 
             setLoading('loginBtn', true);
-            
+
             const result = await callGoogleScript('login', { email, password });
-            
+
             if (result.success) {
                 currentUser = result.user;
                 showPatientDashboard();
@@ -687,8 +671,6 @@ async function loadPatientData() {
             } else {
                 showMessage(result.message || 'Invalid credentials', 'error', 'loginMessage');
             }
-            
-            setLoading('loginBtn', false);
         }
 
         async function signup() {
@@ -697,41 +679,39 @@ async function loadPatientData() {
             const password = document.getElementById('signupPassword').value;
             const phone = document.getElementById('signupPhone').value;
             const gender = document.getElementById('signupGender').value;
-            
+
             if (!name || !email || !password || !phone || !gender) {
                 showMessage('Please fill in all fields', 'error', 'signupMessage');
                 return;
             }
 
             setLoading('signupBtn', true);
-            
+
             const result = await callGoogleScript('register', {
                 name, email, password, phone, gender
             });
-            
+
             if (result.success) {
                 showMessage('Account created successfully! Please login.', 'success', 'signupMessage');
                 setTimeout(() => showLogin(), 2000);
             } else {
                 showMessage(result.message || 'Registration failed', 'error', 'signupMessage');
             }
-            
-            setLoading('signupBtn', false);
         }
 
         async function adminLogin() {
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
-            
+
             if (!username || !password) {
                 showMessage('Please fill in all fields', 'error', 'adminLoginMessage');
                 return;
             }
 
             setLoading('adminLoginBtn', true);
-            
+
             const result = await callGoogleScript('adminLogin', { username, password });
-            
+
             if (result.success) {
                 currentUser = { type: 'admin', username };
                 showAdminDashboard();
@@ -739,22 +719,20 @@ async function loadPatientData() {
             } else {
                 showMessage('Invalid admin credentials', 'error', 'adminLoginMessage');
             }
-            
-            setLoading('adminLoginBtn', false);
         }
 
         // Appointment Functions
         async function bookAppointment() {
             const time = document.getElementById('appointmentTime').value;
             const reason = document.getElementById('appointmentReason').value;
-            
+
             if (!time || !reason) {
                 alert('Please fill in all fields');
                 return;
             }
 
             setLoading('bookBtn', true);
-            
+
             const result = await callGoogleScript('bookAppointment', {
                 userId: currentUser.id,
                 patientName: currentUser.name,
@@ -763,7 +741,7 @@ async function loadPatientData() {
                 reason,
                 status: 'pending'
             });
-            
+
             if (result.success) {
                 alert('Appointment request submitted successfully!');
                 hideBookingForm();
@@ -771,8 +749,6 @@ async function loadPatientData() {
             } else {
                 alert('Failed to book appointment. Please try again.');
             }
-            
-            setLoading('bookBtn', false);
         }
 
         async function updateAppointmentStatus(appointmentId, status) {
@@ -780,7 +756,7 @@ async function loadPatientData() {
                 appointmentId,
                 status
             });
-            
+
             if (result.success) {
                 loadAdminAppointments();
             } else {
@@ -793,7 +769,7 @@ async function loadPatientData() {
             const questions = mentalHealthTests[currentTest].questions;
             let totalScore = 0;
             let allAnswered = true;
-            
+
             for (let i = 0; i < questions.length; i++) {
                 if (testAnswers[i] === undefined) {
                     allAnswered = false;
@@ -801,14 +777,14 @@ async function loadPatientData() {
                 }
                 totalScore += testAnswers[i];
             }
-            
+
             if (!allAnswered) {
                 alert('Please answer all questions');
                 return;
             }
 
             setLoading('submitTestBtn', true);
-            
+
             const result = await callGoogleScript('submitTestResult', {
                 userId: currentUser.id,
                 patientName: currentUser.name,
@@ -818,31 +794,34 @@ async function loadPatientData() {
                 maxScore: questions.length * (mentalHealthTests[currentTest].options.length - 1),
                 answers: testAnswers
             });
-            
+
             if (result.success) {
                 showTestResult(totalScore);
                 loadPatientTestResults();
             } else {
                 alert('Failed to submit test results. Please try again.');
             }
-            
-            setLoading('submitTestBtn', false);
         }
 
         // Data Loading Functions
         async function loadPatientData() {
-            await Promise.all([
-                loadPatientAppointments(),
-                loadPatientTestResults(),
-                loadPatientProfile()
-            ]);
+            try {
+                await Promise.all([
+                    loadPatientAppointments(),
+                    loadPatientTestResults(),
+                    loadPatientProfile()
+                ]);
+            } catch (error) {
+                console.error('Error loading patient data:', error);
+                showMessage('Failed to load patient data. Please refresh.', 'error');
+            }
         }
 
         async function loadPatientAppointments() {
             const result = await callGoogleScript('getPatientAppointments', {
                 userId: currentUser.id
             });
-            
+
             if (result.success) {
                 displayPatientAppointments(result.appointments || []);
             } else {
@@ -854,7 +833,7 @@ async function loadPatientData() {
             const result = await callGoogleScript('getPatientTestResults', {
                 userId: currentUser.id
             });
-            
+
             if (result.success) {
                 displayPatientTestResults(result.testResults || []);
             } else {
@@ -884,7 +863,7 @@ async function loadPatientData() {
 
         async function loadAdminAppointments() {
             const result = await callGoogleScript('getAllAppointments');
-            
+
             if (result.success) {
                 displayAdminAppointments(result.appointments || []);
             } else {
@@ -894,7 +873,7 @@ async function loadPatientData() {
 
         async function loadAdminPatients() {
             const result = await callGoogleScript('getAllPatients');
-            
+
             if (result.success) {
                 displayAdminPatients(result.patients || []);
             } else {
@@ -904,7 +883,7 @@ async function loadPatientData() {
 
         async function loadAdminTestResults() {
             const result = await callGoogleScript('getAllTestResults');
-            
+
             if (result.success) {
                 displayAdminTestResults(result.testResults || []);
             } else {
@@ -915,12 +894,12 @@ async function loadPatientData() {
         // Display Functions
         function displayPatientAppointments(appointments) {
             const container = document.getElementById('appointmentsList');
-            
+
             if (appointments.length === 0) {
                 container.innerHTML = '<p>No appointments found.</p>';
                 return;
             }
-            
+
             container.innerHTML = appointments.map(apt => `
                 <div class="appointment-card">
                     <h4>Appointment Request</h4>
@@ -934,12 +913,12 @@ async function loadPatientData() {
 
         function displayPatientTestResults(testResults) {
             const container = document.getElementById('testResults');
-            
+
             if (testResults.length === 0) {
                 container.innerHTML = '<p>No test results found.</p>';
                 return;
             }
-            
+
             container.innerHTML = testResults.map(result => `
                 <div class="test-result">
                     <h4>${result.testType.charAt(0).toUpperCase() + result.testType.slice(1)} Test</h4>
@@ -951,12 +930,12 @@ async function loadPatientData() {
 
         function displayAdminAppointments(appointments) {
             const container = document.getElementById('adminAppointmentsList');
-            
+
             if (appointments.length === 0) {
                 container.innerHTML = '<p>No appointment requests found.</p>';
                 return;
             }
-            
+
             container.innerHTML = appointments.map(apt => `
                 <div class="admin-card">
                     <h4>${apt.patientName}</h4>
@@ -977,12 +956,12 @@ async function loadPatientData() {
 
         function displayAdminPatients(patients) {
             const container = document.getElementById('adminPatientsList');
-            
+
             if (patients.length === 0) {
                 container.innerHTML = '<p>No patients found.</p>';
                 return;
             }
-            
+
             container.innerHTML = patients.map(patient => `
                 <div class="admin-card">
                     <h4>${patient.name}</h4>
@@ -996,12 +975,12 @@ async function loadPatientData() {
 
         function displayAdminTestResults(testResults) {
             const container = document.getElementById('adminTestResultsList');
-            
+
             if (testResults.length === 0) {
                 container.innerHTML = '<p>No test results found.</p>';
                 return;
             }
-            
+
             container.innerHTML = testResults.map(result => `
                 <div class="admin-card">
                     <h4>${result.patientName}</h4>
@@ -1068,7 +1047,7 @@ async function loadPatientData() {
             // Update sidebar
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Show section
             document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
             document.getElementById(sectionName + 'Section').classList.remove('hidden');
@@ -1078,116 +1057,7 @@ async function loadPatientData() {
             // Update sidebar
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Show section
             document.querySelectorAll('#adminDashboard .section').forEach(section => section.classList.add('hidden'));
-            document.getElementById('admin' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1) + 'Section').classList.remove('hidden');
-        }
-
-        function showBookingForm() {
-            document.getElementById('bookingForm').classList.remove('hidden');
-        }
-
-        function hideBookingForm() {
-            document.getElementById('bookingForm').classList.add('hidden');
-            document.getElementById('appointmentTime').value = '';
-            document.getElementById('appointmentReason').value = '';
-        }
-
-        // Mental Health Test Functions
-        function startTest(testType) {
-            currentTest = testType;
-            testAnswers = {};
-            
-            const test = mentalHealthTests[testType];
-            document.getElementById('testTitle').textContent = test.title;
-            
-            const questionsHTML = test.questions.map((question, index) => `
-                <div class="question">
-                    <h4>${index + 1}. Over the last 2 weeks, how often have you been bothered by ${question}?</h4>
-                    <div class="radio-group">
-                        ${test.options.map(option => `
-                            <div class="radio-option" onclick="selectAnswer(${index}, ${option.value})">
-                                <input type="radio" name="q${index}" value="${option.value}" id="q${index}_${option.value}">
-                                <label for="q${index}_${option.value}">${option.text}</label>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('testQuestions').innerHTML = questionsHTML;
-            
-            // Hide test selection and show test interface
-            document.getElementById('mentalHealthSection').classList.add('hidden');
-            document.getElementById('testInterface').classList.remove('hidden');
-        }
-
-        function selectAnswer(questionIndex, value) {
-            testAnswers[questionIndex] = value;
-            
-            // Update radio button
-            const radio = document.getElementById(`q${questionIndex}_${value}`);
-            radio.checked = true;
-            
-            // Remove previous selections
-            document.querySelectorAll(`input[name="q${questionIndex}"]`).forEach(input => {
-                if (input !== radio) input.checked = false;
-            });
-        }
-
-        function cancelTest() {
-            currentTest = null;
-            testAnswers = {};
-            document.getElementById('testInterface').classList.add('hidden');
-            document.getElementById('mentalHealthSection').classList.remove('hidden');
-        }
-
-        function showTestResult(score) {
-            let interpretation = '';
-            const maxScore = mentalHealthTests[currentTest].questions.length * (mentalHealthTests[currentTest].options.length - 1);
-            
-            if (currentTest === 'depression') {
-                if (score < 5) interpretation = 'Minimal depression';
-                else if (score < 10) interpretation = 'Mild depression';
-                else if (score < 15) interpretation = 'Moderate depression';
-                else if (score < 20) interpretation = 'Moderately severe depression';
-                else interpretation = 'Severe depression';
-            } else if (currentTest === 'anxiety') {
-                if (score < 5) interpretation = 'Minimal anxiety';
-                else if (score < 10) interpretation = 'Mild anxiety';
-                else if (score < 15) interpretation = 'Moderate anxiety';
-                else interpretation = 'Severe anxiety';
-            } else if (currentTest === 'adhd') {
-                if (score < 12) interpretation = 'Unlikely ADHD';
-                else interpretation = 'Possible ADHD - recommend professional evaluation';
-            }
-            
-            const resultHTML = `
-                <div class="test-result">
-                    <h3>Test Complete!</h3>
-                    <p><strong>Your Score:</strong> ${score}/${maxScore}</p>
-                    <p><strong>Interpretation:</strong> ${interpretation}</p>
-                    <p><em>Please note: This is a screening tool and not a diagnostic test. Consult with a healthcare professional for proper evaluation.</em></p>
-                </div>
-            `;
-            
-            document.getElementById('testInterface').innerHTML += resultHTML;
-            
-            setTimeout(() => {
-                cancelTest();
-            }, 5000);
-        }
-
-        function logout() {
-            currentUser = null;
-            showLogin();
-        }
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            showLogin();
-        });
-    </script>
-</body>
-</html>v
+            document.getElementById('admin' + sectionName.charAt(0).toUpperCase() + section
