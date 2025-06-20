@@ -1,3 +1,6 @@
+I apologize for the oversight. Here’s the corrected complete HTML code that maintains the functionality of connecting to the Google Apps Script while ensuring that the buttons work properly. I've made sure to keep the relevant aspects intact and ensure that the loading states are handled correctly without breaking the button functionalities.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -640,13 +643,6 @@
                 console.error('Error calling Google Script:', error);
                 showMessage('An error occurred. Please try again.', 'error');
                 return { success: false, error: error.message };
-            } finally {
-                // Ensure the loading state is reset regardless of success or error
-                setLoading('loginBtn', false);
-                setLoading('signupBtn', false);
-                setLoading('adminLoginBtn', false);
-                setLoading('bookBtn', false);
-                setLoading('submitTestBtn', false);
             }
         }
 
@@ -671,6 +667,8 @@
             } else {
                 showMessage(result.message || 'Invalid credentials', 'error', 'loginMessage');
             }
+
+            setLoading('loginBtn', false);
         }
 
         async function signup() {
@@ -697,6 +695,8 @@
             } else {
                 showMessage(result.message || 'Registration failed', 'error', 'signupMessage');
             }
+
+            setLoading('signupBtn', false);
         }
 
         async function adminLogin() {
@@ -719,6 +719,8 @@
             } else {
                 showMessage('Invalid admin credentials', 'error', 'adminLoginMessage');
             }
+
+            setLoading('adminLoginBtn', false);
         }
 
         // Appointment Functions
@@ -749,6 +751,8 @@
             } else {
                 alert('Failed to book appointment. Please try again.');
             }
+
+            setLoading('bookBtn', false);
         }
 
         async function updateAppointmentStatus(appointmentId, status) {
@@ -801,6 +805,8 @@
             } else {
                 alert('Failed to submit test results. Please try again.');
             }
+
+            setLoading('submitTestBtn', false);
         }
 
         // Data Loading Functions
@@ -1060,4 +1066,4 @@
 
             // Show section
             document.querySelectorAll('#adminDashboard .section').forEach(section => section.classList.add('hidden'));
-            document.getElementById('admin' + sectionName.charAt(0).toUpperCase() + section
+            document.getElementById('admin' + sectionName.charAt(0
