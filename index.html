@@ -1,4 +1,4 @@
-C<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,6 @@ C<!DOCTYPE html>
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -19,346 +18,44 @@ C<!DOCTYPE html>
             align-items: center;
             justify-content: center;
         }
-
         .container {
-            width: 100%;
-            max-width: 1200px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Login Screen */
-        .login-screen {
-            padding: 60px;
-            text-align: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-
-        .login-form {
             max-width: 400px;
-            margin: 0 auto;
+            width: 100%;
             background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .login-form h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
+            padding: 20px;
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
+        .hidden {
+            display: none;
         }
-
+        .form-group {
+            margin-bottom: 15px;
+        }
         .btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #667eea;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.2s;
-            margin-bottom: 10px;
+            width: 100%;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .btn-secondary {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            color: #333;
+            background-color: #764ba2;
         }
-
         .link-btn {
             background: none;
             color: #667eea;
-            text-decoration: underline;
             border: none;
             cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+        #loginMessage, #signupMessage, #adminLoginMessage {
+            margin-top: 10px;
             font-size: 14px;
-        }
-
-        .loading {
-            position: relative;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Dashboard */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px 0;
-        }
-
-        .sidebar h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar li {
-            padding: 15px 30px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar li:hover, .sidebar li.active {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            background: #f8f9fa;
-        }
-
-        .section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .section h2 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 24px;
-        }
-
-        /* Appointments */
-        .appointment-card {
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .appointment-status {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .status-pending {
-            background: #f39c12;
-        }
-
-        .status-approved {
-            background: #27ae60;
-        }
-
-        .status-denied {
-            background: #e74c3c;
-        }
-
-        /* Mental Health Tests */
-        .test-card {
-            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .test-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .question {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .question h4 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .radio-option:hover {
-            background: #e9ecef;
-        }
-
-        .test-result {
-            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        /* Admin specific styles */
-        .admin-card {
-            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .action-buttons {
-            margin-top: 15px;
-        }
-
-        .btn-approve {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .btn-deny {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .success-message {
-            color: #27ae60;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                padding: 20px 0;
-            }
-            
-            .sidebar ul {
-                display: flex;
-                overflow-x: auto;
-            }
-            
-            .sidebar li {
-                white-space: nowrap;
-                min-width: 150px;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
+            color: red;
         }
     </style>
 </head>
@@ -436,190 +133,13 @@ C<!DOCTYPE html>
                 <div id="adminLoginMessage"></div>
             </div>
         </div>
-
-        <!-- Patient Dashboard -->
-        <div id="patientDashboard" class="dashboard hidden">
-            <button class="logout-btn" onclick="logout()">Logout</button>
-            <div class="sidebar">
-                <h3>Patient Portal</h3>
-                <ul>
-                    <li class="active" onclick="showSection('appointments')">Manage Appointments</li>
-                    <li onclick="showSection('mentalHealth')">Mental Health Tests</li>
-                    <li onclick="showSection('healthRecords')">Health Records</li>
-                    <li onclick="showSection('profile')">Profile</li>
-                </ul>
-            </div>
-            <div class="main-content">
-                <!-- Appointments Section -->
-                <div id="appointmentsSection" class="section">
-                    <h2>Manage Appointments</h2>
-                    <div id="appointmentsList">Loading appointments...</div>
-                    <button class="btn" onclick="showBookingForm()">Book New Appointment</button>
-                    
-                    <!-- Booking Form -->
-                    <div id="bookingForm" class="hidden" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                        <h3>Book New Appointment</h3>
-                        <div class="form-group">
-                            <label>Preferred Appointment Time:</label>
-                            <select id="appointmentTime">
-                                <option value="">Select Time</option>
-                                <option value="thursday-1-2pm">Thursday 1-2 PM</option>
-                                <option value="friday-1-2pm">Friday 1-2 PM</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Reason for Visit:</label>
-                            <textarea id="appointmentReason" placeholder="Please describe the reason for your visit"></textarea>
-                        </div>
-                        <button class="btn" id="bookBtn" onclick="bookAppointment()">Submit Request</button>
-                        <button class="btn btn-secondary" onclick="hideBookingForm()">Cancel</button>
-                    </div>
-                </div>
-
-                <!-- Mental Health Tests Section -->
-                <div id="mentalHealthSection" class="section hidden">
-                    <h2>Mental Health Tests</h2>
-                    <div class="test-card" onclick="startTest('depression')">
-                        <h3>Depression Screening (PHQ-9)</h3>
-                        <p>Take a self-assessment to screen for depression symptoms</p>
-                    </div>
-                    <div class="test-card" onclick="startTest('anxiety')">
-                        <h3>Anxiety Screening (GAD-7)</h3>
-                        <p>Take a self-assessment to screen for anxiety symptoms</p>
-                    </div>
-                    <div class="test-card" onclick="startTest('adhd')">
-                        <h3>ADHD Screening</h3>
-                        <p>Take a self-assessment to screen for ADHD symptoms</p>
-                    </div>
-                    <div id="testResults">Loading test results...</div>
-                </div>
-
-                <!-- Test Taking Interface -->
-                <div id="testInterface" class="section hidden">
-                    <h2 id="testTitle"></h2>
-                    <div id="testQuestions"></div>
-                    <button class="btn" id="submitTestBtn" onclick="submitTest()">Submit Test</button>
-                    <button class="btn btn-secondary" onclick="cancelTest()">Cancel</button>
-                </div>
-
-                <!-- Health Records Section -->
-                <div id="healthRecordsSection" class="section hidden">
-                    <h2>Health Records</h2>
-                    <p>Your health records and medical history will be displayed here.</p>
-                    <div id="healthRecordsList"></div>
-                </div>
-
-                <!-- Profile Section -->
-                <div id="profileSection" class="section hidden">
-                    <h2>Profile</h2>
-                    <div id="profileInfo"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Admin Dashboard -->
-        <div id="adminDashboard" class="dashboard hidden">
-            <button class="logout-btn" onclick="logout()">Logout</button>
-            <div class="sidebar">
-                <h3>Admin Portal</h3>
-                <ul>
-                    <li class="active" onclick="showAdminSection('appointments')">Appointment Requests</li>
-                    <li onclick="showAdminSection('patients')">Patient Management</li>
-                    <li onclick="showAdminSection('testResults')">Test Results</li>
-                </ul>
-            </div>
-            <div class="main-content">
-                <!-- Admin Appointments Section -->
-                <div id="adminAppointmentsSection" class="section">
-                    <h2>Appointment Requests</h2>
-                    <div id="adminAppointmentsList">Loading appointment requests...</div>
-                </div>
-
-                <!-- Admin Patients Section -->
-                <div id="adminPatientsSection" class="section hidden">
-                    <h2>Patient Management</h2>
-                    <div id="adminPatientsList">Loading patients...</div>
-                </div>
-
-                <!-- Admin Test Results Section -->
-                <div id="adminTestResultsSection" class="section hidden">
-                    <h2>Test Results</h2>
-                    <div id="adminTestResultsList">Loading test results...</div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Replace this with your Google Apps Script Web App URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFZmnpuat5l0RvVnfI9f7jqsmj0Vn98dA16JOvySY3N3_WEuCSMOw-AL4PqhMGLcIWHg/exec';
-        
-        // Global variables
+        const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // Update with your actual script URL
+
         let currentUser = null;
-        let currentTest = null;
-        let testAnswers = {};
 
-        // Mental Health Test Questions
-        const mentalHealthTests = {
-            depression: {
-                title: 'Depression Screening (PHQ-9)',
-                questions: [
-                    'Little interest or pleasure in doing things',
-                    'Feeling down, depressed, or hopeless',
-                    'Trouble falling or staying asleep, or sleeping too much',
-                    'Feeling tired or having little energy',
-                    'Poor appetite or overeating',
-                    'Feeling bad about yourself or that you are a failure or have let yourself or your family down',
-                    'Trouble concentrating on things, such as reading the newspaper or watching television',
-                    'Moving or speaking so slowly that other people could have noticed, or the opposite being so fidgety or restless that you have been moving around a lot more than usual',
-                    'Thoughts that you would be better off dead, or of hurting yourself'
-                ],
-                options: [
-                    { value: 0, text: 'Not at all' },
-                    { value: 1, text: 'Several days' },
-                    { value: 2, text: 'More than half the days' },
-                    { value: 3, text: 'Nearly every day' }
-                ]
-            },
-            anxiety: {
-                title: 'Anxiety Screening (GAD-7)',
-                questions: [
-                    'Feeling nervous, anxious, or on edge',
-                    'Not being able to stop or control worrying',
-                    'Worrying too much about different things',
-                    'Trouble relaxing',
-                    'Being so restless that it is hard to sit still',
-                    'Becoming easily annoyed or irritable',
-                    'Feeling afraid, as if something awful might happen'
-                ],
-                options: [
-                    { value: 0, text: 'Not at all' },
-                    { value: 1, text: 'Several days' },
-                    { value: 2, text: 'More than half the days' },
-                    { value: 3, text: 'Nearly every day' }
-                ]
-            },
-            adhd: {
-                title: 'ADHD Screening',
-                questions: [
-                    'I have trouble wrapping up the final details of a project, once the challenging parts have been done',
-                    'I have difficulty getting things in order when I have to do a task that requires organization',
-                    'I have problems remembering appointments or obligations',
-                    'When I have a task that requires a lot of thought, I avoid or delay getting started',
-                    'I fidget or squirm with my hands or feet when I have to sit down for long periods',
-                    'I feel overly active and compelled to do things, like I was driven by a motor'
-                ],
-                options: [
-                    { value: 0, text: 'Never' },
-                    { value: 1, text: 'Rarely' },
-                    { value: 2, text: 'Sometimes' },
-                    { value: 3, text: 'Often' },
-                    { value: 4, text: 'Very Often' }
-                ]
-            }
-        };
-
-        // API Functions
         async function callGoogleScript(action, data = {}) {
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -627,44 +147,42 @@ C<!DOCTYPE html>
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ action, ...data })
+                    body: JSON.stringify({ action, ...data }),
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                
+
                 const result = await response.json();
                 return result;
             } catch (error) {
                 console.error('Error calling Google Script:', error);
-                showMessage('An error occurred. Please try again.', 'error');
+                showMessage('An error occurred. Please try again.', 'error', 'loginMessage');
                 return { success: false, error: error.message };
             }
         }
 
-        // Authentication Functions
         async function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            
+
             if (!email || !password) {
                 showMessage('Please fill in all fields', 'error', 'loginMessage');
                 return;
             }
 
             setLoading('loginBtn', true);
-            
+
             const result = await callGoogleScript('login', { email, password });
-            
+
             if (result.success) {
                 currentUser = result.user;
-                showPatientDashboard();
-                loadPatientData();
+                // Implement your patient dashboard logic here
             } else {
                 showMessage(result.message || 'Invalid credentials', 'error', 'loginMessage');
             }
-            
+
             setLoading('loginBtn', false);
         }
 
@@ -674,497 +192,81 @@ C<!DOCTYPE html>
             const password = document.getElementById('signupPassword').value;
             const phone = document.getElementById('signupPhone').value;
             const gender = document.getElementById('signupGender').value;
-            
+
             if (!name || !email || !password || !phone || !gender) {
                 showMessage('Please fill in all fields', 'error', 'signupMessage');
                 return;
             }
 
             setLoading('signupBtn', true);
-            
+
             const result = await callGoogleScript('register', {
                 name, email, password, phone, gender
             });
-            
+
             if (result.success) {
                 showMessage('Account created successfully! Please login.', 'success', 'signupMessage');
                 setTimeout(() => showLogin(), 2000);
             } else {
                 showMessage(result.message || 'Registration failed', 'error', 'signupMessage');
             }
-            
+
             setLoading('signupBtn', false);
         }
 
         async function adminLogin() {
             const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
-            
+
             if (!username || !password) {
                 showMessage('Please fill in all fields', 'error', 'adminLoginMessage');
                 return;
             }
 
             setLoading('adminLoginBtn', true);
-            
+
             const result = await callGoogleScript('adminLogin', { username, password });
-            
+
             if (result.success) {
-                currentUser = { type: 'admin', username };
-                showAdminDashboard();
-                loadAdminData();
+                // Implement your admin dashboard logic here
             } else {
-                showMessage('Invalid admin credentials', 'error', 'adminLoginMessage');
+                showMessage(result.message || 'Invalid credentials', 'error', 'adminLoginMessage');
             }
-            
+
             setLoading('adminLoginBtn', false);
         }
 
-        // Appointment Functions
-        async function bookAppointment() {
-            const time = document.getElementById('appointmentTime').value;
-            const reason = document.getElementById('appointmentReason').value;
-            
-            if (!time || !reason) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            setLoading('bookBtn', true);
-            
-            const result = await callGoogleScript('bookAppointment', {
-                userId: currentUser.id,
-                patientName: currentUser.name,
-                patientEmail: currentUser.email,
-                time,
-                reason,
-                status: 'pending'
-            });
-            
-            if (result.success) {
-                alert('Appointment request submitted successfully!');
-                hideBookingForm();
-                loadPatientAppointments();
-            } else {
-                alert('Failed to book appointment. Please try again.');
-            }
-            
-            setLoading('bookBtn', false);
-        }
-
-        async function updateAppointmentStatus(appointmentId, status) {
-            const result = await callGoogleScript('updateAppointmentStatus', {
-                appointmentId,
-                status
-            });
-            
-            if (result.success) {
-                loadAdminAppointments();
-            } else {
-                alert('Failed to update appointment status');
-            }
-        }
-
-        // Mental Health Test Functions
-        async function submitTest() {
-            const questions = mentalHealthTests[currentTest].questions;
-            let totalScore = 0;
-            let allAnswered = true;
-            
-            for (let i = 0; i < questions.length; i++) {
-                if (testAnswers[i] === undefined) {
-                    allAnswered = false;
-                    break;
-                }
-                totalScore += testAnswers[i];
-            }
-            
-            if (!allAnswered) {
-                alert('Please answer all questions');
-                return;
-            }
-
-            setLoading('submitTestBtn', true);
-            
-            const result = await callGoogleScript('submitTestResult', {
-                userId: currentUser.id,
-                patientName: currentUser.name,
-                patientEmail: currentUser.email,
-                testType: currentTest,
-                score: totalScore,
-                maxScore: questions.length * (mentalHealthTests[currentTest].options.length - 1),
-                answers: testAnswers
-            });
-            
-            if (result.success) {
-                showTestResult(totalScore);
-                loadPatientTestResults();
-            } else {
-                alert('Failed to submit test results. Please try again.');
-            }
-            
-            setLoading('submitTestBtn', false);
-        }
-
-        // Data Loading Functions
-        async function loadPatientData() {
-            await Promise.all([
-                loadPatientAppointments(),
-                loadPatientTestResults(),
-                loadPatientProfile()
-            ]);
-        }
-
-        async function loadPatientAppointments() {
-            const result = await callGoogleScript('getPatientAppointments', {
-                userId: currentUser.id
-            });
-            
-            if (result.success) {
-                displayPatientAppointments(result.appointments || []);
-            } else {
-                document.getElementById('appointmentsList').innerHTML = 'Failed to load appointments.';
-            }
-        }
-
-        async function loadPatientTestResults() {
-            const result = await callGoogleScript('getPatientTestResults', {
-                userId: currentUser.id
-            });
-            
-            if (result.success) {
-                displayPatientTestResults(result.testResults || []);
-            } else {
-                document.getElementById('testResults').innerHTML = 'Failed to load test results.';
-            }
-        }
-
-        async function loadPatientProfile() {
-            document.getElementById('profileInfo').innerHTML = `
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                    <h3>Profile Information</h3>
-                    <p><strong>Name:</strong> ${currentUser.name}</p>
-                    <p><strong>Email:</strong> ${currentUser.email}</p>
-                    <p><strong>Phone:</strong> ${currentUser.phone}</p>
-                    <p><strong>Gender:</strong> ${currentUser.gender}</p>
-                </div>
-            `;
-        }
-
-        async function loadAdminData() {
-            await Promise.all([
-                loadAdminAppointments(),
-                loadAdminPatients(),
-                loadAdminTestResults()
-            ]);
-        }
-
-        async function loadAdminAppointments() {
-            const result = await callGoogleScript('getAllAppointments');
-            
-            if (result.success) {
-                displayAdminAppointments(result.appointments || []);
-            } else {
-                document.getElementById('adminAppointmentsList').innerHTML = 'Failed to load appointments.';
-            }
-        }
-
-        async function loadAdminPatients() {
-            const result = await callGoogleScript('getAllPatients');
-            
-            if (result.success) {
-                displayAdminPatients(result.patients || []);
-            } else {
-                document.getElementById('adminPatientsList').innerHTML = 'Failed to load patients.';
-            }
-        }
-
-        async function loadAdminTestResults() {
-            const result = await callGoogleScript('getAllTestResults');
-            
-            if (result.success) {
-                displayAdminTestResults(result.testResults || []);
-            } else {
-                document.getElementById('adminTestResultsList').innerHTML = 'Failed to load test results.';
-            }
-        }
-
-        // Display Functions
-        function displayPatientAppointments(appointments) {
-            const container = document.getElementById('appointmentsList');
-            
-            if (appointments.length === 0) {
-                container.innerHTML = '<p>No appointments found.</p>';
-                return;
-            }
-            
-            container.innerHTML = appointments.map(apt => `
-                <div class="appointment-card">
-                    <h4>Appointment Request</h4>
-                    <p><strong>Time:</strong> ${apt.time}</p>
-                    <p><strong>Reason:</strong> ${apt.reason}</p>
-                    <p><strong>Date Submitted:</strong> ${new Date(apt.timestamp).toLocaleDateString()}</p>
-                    <span class="appointment-status status-${apt.status}">${apt.status}</span>
-                </div>
-            `).join('');
-        }
-
-        function displayPatientTestResults(testResults) {
-            const container = document.getElementById('testResults');
-            
-            if (testResults.length === 0) {
-                container.innerHTML = '<p>No test results found.</p>';
-                return;
-            }
-            
-            container.innerHTML = testResults.map(result => `
-                <div class="test-result">
-                    <h4>${result.testType.charAt(0).toUpperCase() + result.testType.slice(1)} Test</h4>
-                    <p><strong>Score:</strong> ${result.score}/${result.maxScore}</p>
-                    <p><strong>Date:</strong> ${new Date(result.timestamp).toLocaleDateString()}</p>
-                </div>
-            `).join('');
-        }
-
-        function displayAdminAppointments(appointments) {
-            const container = document.getElementById('adminAppointmentsList');
-            
-            if (appointments.length === 0) {
-                container.innerHTML = '<p>No appointment requests found.</p>';
-                return;
-            }
-            
-            container.innerHTML = appointments.map(apt => `
-                <div class="admin-card">
-                    <h4>${apt.patientName}</h4>
-                    <p><strong>Email:</strong> ${apt.patientEmail}</p>
-                    <p><strong>Time:</strong> ${apt.time}</p>
-                    <p><strong>Reason:</strong> ${apt.reason}</p>
-                    <p><strong>Status:</strong> ${apt.status}</p>
-                    <p><strong>Date:</strong> ${new Date(apt.timestamp).toLocaleDateString()}</p>
-                    ${apt.status === 'pending' ? `
-                        <div class="action-buttons">
-                            <button class="btn-approve" onclick="updateAppointmentStatus('${apt.id}', 'approved')">Approve</button>
-                            <button class="btn-deny" onclick="updateAppointmentStatus('${apt.id}', 'denied')">Deny</button>
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function displayAdminPatients(patients) {
-            const container = document.getElementById('adminPatientsList');
-            
-            if (patients.length === 0) {
-                container.innerHTML = '<p>No patients found.</p>';
-                return;
-            }
-            
-            container.innerHTML = patients.map(patient => `
-                <div class="admin-card">
-                    <h4>${patient.name}</h4>
-                    <p><strong>Email:</strong> ${patient.email}</p>
-                    <p><strong>Phone:</strong> ${patient.phone}</p>
-                    <p><strong>Gender:</strong> ${patient.gender}</p>
-                    <p><strong>Registered:</strong> ${new Date(patient.timestamp).toLocaleDateString()}</p>
-                </div>
-            `).join('');
-        }
-
-        function displayAdminTestResults(testResults) {
-            const container = document.getElementById('adminTestResultsList');
-            
-            if (testResults.length === 0) {
-                container.innerHTML = '<p>No test results found.</p>';
-                return;
-            }
-            
-            container.innerHTML = testResults.map(result => `
-                <div class="admin-card">
-                    <h4>${result.patientName}</h4>
-                    <p><strong>Email:</strong> ${result.patientEmail}</p>
-                    <p><strong>Test:</strong> ${result.testType.charAt(0).toUpperCase() + result.testType.slice(1)}</p>
-                    <p><strong>Score:</strong> ${result.score}/${result.maxScore}</p>
-                    <p><strong>Date:</strong> ${new Date(result.timestamp).toLocaleDateString()}</p>
-                </div>
-            `).join('');
-        }
-
-        // UI Helper Functions
-        function showMessage(message, type, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = `<div class="${type}-message">${message}</div>`;
-        }
-
-        function setLoading(buttonId, loading) {
-            const button = document.getElementById(buttonId);
-            if (loading) {
-                button.disabled = true;
-                button.classList.add('loading');
-                button.textContent = '';
-            } else {
-                button.disabled = false;
-                button.classList.remove('loading');
-                button.textContent = button.getAttribute('data-original-text') || 'Submit';
-            }
-        }
-
-        // Screen Navigation Functions
-        function showLogin() {
-            hideAllScreens();
-            document.getElementById('loginScreen').classList.remove('hidden');
-        }
-
         function showSignup() {
-            hideAllScreens();
+            document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('signupScreen').classList.remove('hidden');
         }
 
+        function showLogin() {
+            document.getElementById('signupScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
         function showAdminLogin() {
-            hideAllScreens();
+            document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('adminLoginScreen').classList.remove('hidden');
         }
 
-        function showPatientDashboard() {
-            hideAllScreens();
-            document.getElementById('patientDashboard').classList.remove('hidden');
-        }
-
-        function showAdminDashboard() {
-            hideAllScreens();
-            document.getElementById('adminDashboard').classList.remove('hidden');
-        }
-
-        function hideAllScreens() {
-            document.querySelectorAll('.login-screen, .dashboard').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-        }
-
-        function showSection(sectionName) {
-            // Update sidebar
-            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Show section
-            document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
-            document.getElementById(sectionName + 'Section').classList.remove('hidden');
-        }
-
-        function showAdminSection(sectionName) {
-            // Update sidebar
-            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Show section
-            document.querySelectorAll('#adminDashboard .section').forEach(section => section.classList.add('hidden'));
-            document.getElementById('admin' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1) + 'Section').classList.remove('hidden');
-        }
-
-        function showBookingForm() {
-            document.getElementById('bookingForm').classList.remove('hidden');
-        }
-
-        function hideBookingForm() {
-            document.getElementById('bookingForm').classList.add('hidden');
-            document.getElementById('appointmentTime').value = '';
-            document.getElementById('appointmentReason').value = '';
-        }
-
-        // Mental Health Test Functions
-        function startTest(testType) {
-            currentTest = testType;
-            testAnswers = {};
-            
-            const test = mentalHealthTests[testType];
-            document.getElementById('testTitle').textContent = test.title;
-            
-            const questionsHTML = test.questions.map((question, index) => `
-                <div class="question">
-                    <h4>${index + 1}. Over the last 2 weeks, how often have you been bothered by ${question}?</h4>
-                    <div class="radio-group">
-                        ${test.options.map(option => `
-                            <div class="radio-option" onclick="selectAnswer(${index}, ${option.value})">
-                                <input type="radio" name="q${index}" value="${option.value}" id="q${index}_${option.value}">
-                                <label for="q${index}_${option.value}">${option.text}</label>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('testQuestions').innerHTML = questionsHTML;
-            
-            // Hide test selection and show test interface
-            document.getElementById('mentalHealthSection').classList.add('hidden');
-            document.getElementById('testInterface').classList.remove('hidden');
-        }
-
-        function selectAnswer(questionIndex, value) {
-            testAnswers[questionIndex] = value;
-            
-            // Update radio button
-            const radio = document.getElementById(`q${questionIndex}_${value}`);
-            radio.checked = true;
-            
-            // Remove previous selections
-            document.querySelectorAll(`input[name="q${questionIndex}"]`).forEach(input => {
-                if (input !== radio) input.checked = false;
-            });
-        }
-
-        function cancelTest() {
-            currentTest = null;
-            testAnswers = {};
-            document.getElementById('testInterface').classList.add('hidden');
-            document.getElementById('mentalHealthSection').classList.remove('hidden');
-        }
-
-        function showTestResult(score) {
-            let interpretation = '';
-            const maxScore = mentalHealthTests[currentTest].questions.length * (mentalHealthTests[currentTest].options.length - 1);
-            
-            if (currentTest === 'depression') {
-                if (score < 5) interpretation = 'Minimal depression';
-                else if (score < 10) interpretation = 'Mild depression';
-                else if (score < 15) interpretation = 'Moderate depression';
-                else if (score < 20) interpretation = 'Moderately severe depression';
-                else interpretation = 'Severe depression';
-            } else if (currentTest === 'anxiety') {
-                if (score < 5) interpretation = 'Minimal anxiety';
-                else if (score < 10) interpretation = 'Mild anxiety';
-                else if (score < 15) interpretation = 'Moderate anxiety';
-                else interpretation = 'Severe anxiety';
-            } else if (currentTest === 'adhd') {
-                if (score < 12) interpretation = 'Unlikely ADHD';
-                else interpretation = 'Possible ADHD - recommend professional evaluation';
+        function setLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (isLoading) {
+                button.innerText = 'Loading...';
+                button.disabled = true;
+            } else {
+                button.innerText = buttonId === 'loginBtn' ? 'Login' : 'Create Account';
+                button.disabled = false;
             }
-            
-            const resultHTML = `
-                <div class="test-result">
-                    <h3>Test Complete!</h3>
-                    <p><strong>Your Score:</strong> ${score}/${maxScore}</p>
-                    <p><strong>Interpretation:</strong> ${interpretation}</p>
-                    <p><em>Please note: This is a screening tool and not a diagnostic test. Consult with a healthcare professional for proper evaluation.</em></p>
-                </div>
-            `;
-            
-            document.getElementById('testInterface').innerHTML += resultHTML;
-            
-            setTimeout(() => {
-                cancelTest();
-            }, 5000);
         }
 
-        function logout() {
-            currentUser = null;
-            showLogin();
+        function showMessage(message, type, elementId) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.innerText = message;
+            messageElement.style.color = type === 'error' ? 'red' : 'green';
         }
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            showLogin();
-        });
     </script>
 </body>
-</html>v
+</html>
