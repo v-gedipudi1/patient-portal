@@ -621,24 +621,47 @@ C<!DOCTYPE html>
 
         // API Functions
         async function callGoogleScript(action, data = {}) {
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ action, ...data })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                console.error('Error calling Google Script:', error);
-                showMessage('An error occurred. Please try again.', 'error');
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action, ...data })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error calling Google Script:', error);
+        showMessage('An error occurred. Please try again.', 'error');
+        return { success: false, error: error.message };
+    } finally {
+        // Ensure the loading state is reset regardless of success or error
+        setLoading('loginBtn', false);
+        setLoading('signupBtn', false);
+        setLoading('adminLoginBtn', false);
+        setLoading('bookBtn', false);
+        setLoading('submitTestBtn', false);
+    }
+}
+
+async function loadPatientData() {
+    try {
+        await Promise.all([
+            loadPatientAppointments(),
+            loadPatientTestResults(),
+            loadPatientProfile()
+        ]);
+    } catch (error) {
+        console.error('Error loading patient data:', error);
+        showMessage('Failed to load patient data. Please refresh.', 'error');
+    }
+}
                 return { success: false, error: error.message };
             }
         }
